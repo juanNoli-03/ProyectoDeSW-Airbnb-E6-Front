@@ -1,9 +1,4 @@
-import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import SecurityIcon from "@mui/icons-material/Security";
-import ChairIcon from "@mui/icons-material/Chair";
-import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
-import AssuredWorkloadIcon from "@mui/icons-material/AssuredWorkload";
 import LoginIcon from "@mui/icons-material/Login";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import { InputAdornment, IconButton, Box, Container } from "@mui/material";
@@ -29,8 +24,6 @@ export default function LoginSignUp({ isLogin }) {
     dni: ""
   });
 
-  const [errores, setErrores] = useState({});
-
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
   const changePasswordVisibility = () => {
@@ -47,49 +40,6 @@ export default function LoginSignUp({ isLogin }) {
     return Object.values(objeto).every(
       (valor) => valor !== null && valor !== undefined && valor !== ""
     );
-  };
-
-  const presenciaDeErrores = Object.values(errores).some(
-    (valor) => valor != null
-  );
-
-  const validarCampo = (campo, valor) => {
-    const patronEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/;
-
-    if (campo === "email" && !patronEmail.test(valor) && valor != "") {
-      setErrores((errores) => ({
-        ...errores,
-        email: "El formato del email no es válido.",
-      }));
-    }
-
-    if (campo === "email" && (patronEmail.test(valor) || valor === "")) {
-      setErrores((errores) => ({
-        ...errores,
-        email: null,
-      }));
-    }
-
-    if (
-      campo === "contraseña" &&
-      (valor.length < 6 || valor.length > 20) &&
-      valor != ""
-    ) {
-      setErrores((errores) => ({
-        ...errores,
-        contraseña: "La contraseña debe ser de entre 6 y 20 caracteres.",
-      }));
-    }
-
-    if (
-      campo === "contraseña" &&
-      ((valor.length >= 6 && valor.length <= 20) || valor === "")
-    ) {
-      setErrores((errores) => ({
-        ...errores,
-        contraseña: null,
-      }));
-    }
   };
 
   const manejarEnvio = async () => {
@@ -139,40 +89,186 @@ export default function LoginSignUp({ isLogin }) {
     } 
 
   const textFieldStyle = {
-    "& .MuiOutlinedInput-root": {
-      "&.Mui-focused fieldset": {
-        borderColor: "#6655D9",
+     '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: '#ff5a5f',
       },
-      "& .MuiOutlinedInput-notchedOutline": {
-        borderColor: "#505050",
+      '&:hover fieldset': {
+        borderColor: '#ff5a5f',
       },
-    },
-    "& .MuiInputLabel-root": {
-      color: "#BBBBBB",
-    },
-    "& .MuiInputLabel-root.Mui-focused": {
-      color: "#6655D9",
-    },
-    "& .MuiOutlinedInput-root.Mui-error fieldset": {
-      borderColor: "red",
-    },
-    "& .MuiInputBase-input": {
-      color: "#BBBBBB",
-      "&:focus": {
-        color: "#BBBBBB",
+      '&.Mui-focused fieldset': {
+        borderColor: '#ff5a5f',
       },
+     },
+    '& label.Mui-focused': {
+      color: '#ff5a5f',
     },
-    "& .MuiInputLabel-root.Mui-error": {
-      color: "red",
+    '& label': {
+      color: '#ff5a5f',
     },
   };
 
   return (
-      <Container sx={{display:"flex", justifyContent:"center", p:5}}>
-        <Box>
+      <Container sx={{display:"flex", alignItems:"center", flexDirection:"column", p:5, gap:"20px"}}>
+        <Box pb={5}>
           <img src="/assets/bannerAirbnb.png" alt="" style={{height:"120px"}}/>
         </Box>
-      </Container>
+        <Card variant="elevation" elevation={5} sx={{backgroundColor:"#fffff", borderRadius:"3px"}}>
+          <CardContent sx={{display:"flex", flexDirection:"column", gap:"30px", p:5}}>
+              <Typography
+                    variant="h4"
+                    color="black"
+                    sx={{ fontWeight: "bold", textAlign: "center" }}
+                  >
+                    {isLogin === true
+                      ? "Iniciar Sesión"
+                      : "Registrarse"
+                    }
+              </Typography>
+              {!isLogin && (
+                <>
+                  <TextField
+                    id="firstName"
+                    label="Nombre"
+                    value={usuarioRegister.firstName}
+                    onChange={(e) =>
+                      setUsuarioRegister({
+                        ...usuarioRegister,
+                        firstName: e.target.value
+                      })
+                    }
+                    size="small"
+                    sx={textFieldStyle}
+                  />
+                  <TextField
+                    id="lastName"
+                    label="Apellido"
+                    value={usuarioRegister.lastName}
+                    onChange={(e) =>
+                      setUsuarioRegister({
+                        ...usuarioRegister,
+                        lastName: e.target.value
+                      })
+                    }
+                    size="small"
+                    sx={textFieldStyle}
+                  />
+                </>
+              )}
+              <TextField
+                id=""
+                type="text"
+                label="E-mail"
+                name="email"
+                size="small"
+                value={
+                  isLogin === true
+                    ? usuario.email
+                    : usuarioRegister.email
+                }
+                onChange={(e) =>
+                  isLogin === true
+                    ? setUsuario({ ...usuario, email: e.target.value })
+                    : setUsuarioRegister({
+                        ...usuarioRegister,
+                        email: e.target.value,
+                      })
+                }
+                sx={textFieldStyle}
+              />
+              <TextField
+                  id=""
+                  type={passwordVisibility ? "text" : "password"}
+                  label="Contraseña"
+                  name="contraseña"
+                  size="small"
+                  value={
+                    isLogin == true
+                      ? usuario.password
+                      : usuarioRegister.password
+                  }
+                  onChange={(e) =>
+                    isLogin === true
+                      ? setUsuario({ ...usuario, password: e.target.value })
+                      : setUsuarioRegister({
+                          ...usuarioRegister,
+                          password: e.target.value,
+                        })
+                  }
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={changePasswordVisibility}
+                          edge="end"
+                          sx={{ p: 1, color: "black" }}
+                        >
+                          {passwordVisibility ? (
+                            <Visibility />
+                          ) : (
+                            <VisibilityOff />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={textFieldStyle}
+                />
+              <Button
+                variant="contained"
+                type="submit"
+                sx={{
+                  backgroundColor: "#ff5a5f",
+                  "&.Mui-disabled": {
+                    backgroundColor: "#cdcdcd",
+                    color: "#666",
+                  },
+                }}
+                disabled={
+                  !datosCompletos(
+                    isLogin === true
+                      ? usuario
+                      : usuarioRegister
+                  )
+                }
+                endIcon={
+                  isLogin === true ? (
+                    <LoginIcon />
+                  ) : isLogin === false ? (
+                    <HowToRegIcon />
+                  ) : (
+                    <CheckIcon />
+                  )
+                }
+                onClick={manejarEnvio}
+              >
+                {isLogin === true
+                  ? "Ingresar"
+                  : "Crear Cuenta"
+                }
+              </Button>
+          </CardContent>
+      </Card>
+      {isLogin && 
+        <Box sx={{display:"flex", flexDirection:"column", alignItems:"center", gap:"5px"}}>
+         <Typography
+            variant="p"
+            color="black"
+          >
+            ¿Todavía no tenes una cuenta?{"\n"}
+          </Typography>
+          <Typography
+            variant="p"
+            fontWeight="bold"
+            color="#ff5a5f"
+            sx={{ cursor: "pointer", textDecoration: "underline" }}
+            onClick={handleNavigateSignUp}
+          >
+            Registrate acá
+          </Typography>
+      </Box>
+      }
+    </Container>
   );
 }
 
