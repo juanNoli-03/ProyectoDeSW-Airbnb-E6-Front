@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import axios from "axios";
 import CheckIcon from "@mui/icons-material/Check";
+import LoadingScreen from "../UI/LoadingScreen/LoadingScreen";
 
 export default function LoginSignUp({ isLogin }) {
   
@@ -30,6 +31,14 @@ export default function LoginSignUp({ isLogin }) {
     setPasswordVisibility(!passwordVisibility);
   };
 
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [loadingScreen, setLoadingScreen] = useState({
+    message: "",
+    duration: null,
+  });
+
+
   const navigate = useNavigate();
 
   const handleNavigateSignUp = () => {
@@ -43,6 +52,8 @@ export default function LoginSignUp({ isLogin }) {
   };
 
   const manejarEnvio = async () => {
+    const duration = 2000;
+    setIsLoading(false);
     if (isLogin == true) {
         await axios.post("http://localhost:8080/login", {
           email: usuario.email,
@@ -50,16 +61,23 @@ export default function LoginSignUp({ isLogin }) {
         })
         .then (response => {
             console.log(response);
-            navigate("/home");
+            setLoadingScreen({
+              message: "",
+              duration: duration,
+            }),
+            setIsLoading(true),
+            setTimeout(() => {
+              navigate("/home");
+            }, duration)
         })
         .catch (e => {
           console.log(e);
         })
         .finally(
-            setUsuario({
-                email: "",
-                password: "",
-            })
+          setUsuario({
+              email: "",
+              password: "",
+          })
         )
     } else {
         await axios.post("http://localhost:8080/signUp", {
@@ -268,6 +286,12 @@ export default function LoginSignUp({ isLogin }) {
           </Typography>
       </Box>
       }
+      {isLoading && (
+        <LoadingScreen
+          message={loadingScreen.message}
+          duration={loadingScreen.duration}
+        />
+      )}
     </Container>
   );
 }
