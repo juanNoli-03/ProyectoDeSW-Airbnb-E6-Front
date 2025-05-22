@@ -21,8 +21,7 @@ export default function LoginSignUp({ isLogin }) {
     firstName: "",
     lastName: "",
     email: "",
-    password: "",
-    dni: ""
+    password: ""
   });
 
   const [passwordVisibility, setPasswordVisibility] = useState(false);
@@ -95,12 +94,11 @@ export default function LoginSignUp({ isLogin }) {
             firstName: usuarioRegister.firstName,
             lastName: usuarioRegister.lastName,
             email: usuarioRegister.email,
-            password: usuarioRegister.password,
-            dni: usuarioRegister.dni
+            password: usuarioRegister.password
         })
         .then(response =>{
             console.log(response);
-            navigate("/");
+            navigate("/login");
         })
         .catch(e => {
             console.log(e);
@@ -110,8 +108,7 @@ export default function LoginSignUp({ isLogin }) {
                 firstName: "",
                 lastName: "",
                 email: "",
-                password: "",
-                dni: ""
+                password: ""
             })
         )
       }
@@ -177,19 +174,6 @@ export default function LoginSignUp({ isLogin }) {
                       setUsuarioRegister({
                         ...usuarioRegister,
                         lastName: e.target.value
-                      })
-                    }
-                    size="small"
-                    sx={textFieldStyle}
-                  />
-                  <TextField
-                    id="dni"
-                    label="DNI"
-                    value={usuarioRegister.dni}
-                    onChange={(e) =>
-                      setUsuarioRegister({
-                        ...usuarioRegister,
-                        dni: e.target.value
                       })
                     }
                     size="small"
