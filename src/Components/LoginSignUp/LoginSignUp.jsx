@@ -10,6 +10,7 @@ import { useState } from "react";
 import axios from "axios";
 import CheckIcon from "@mui/icons-material/Check";
 import LoadingScreen from "../UI/LoadingScreen/LoadingScreen";
+import GenericSnackbar from "../UI/Snackbar/Snackbar";
 
 export default function LoginSignUp({ isLogin }) {
 
@@ -37,6 +38,12 @@ export default function LoginSignUp({ isLogin }) {
     duration: null,
   });
 
+  const [snackbar, setSnackbar] = useState({
+    status: "",
+    message: "",
+  });
+
+  const [snackbarVisibility, setSnackbarVisibility] = useState(false);
 
   const navigate = useNavigate();
 
@@ -54,9 +61,9 @@ export default function LoginSignUp({ isLogin }) {
 
   const manejarEnvio = async () => {
 
-    
-    const duration = 2000;
     setIsLoading(false);
+    setSnackbarVisibility(false);
+
     if (isLogin == true) {
         await axios.post("http://localhost:8080/login", {
           email: usuario.email,
@@ -66,13 +73,13 @@ export default function LoginSignUp({ isLogin }) {
             console.log(response);
             setLoadingScreen({
               message: "",
-              duration: duration,
+              duration: 2000,
             }),
             setIsLoading(true),
             setTimeout(() => {
               localStorage.setItem("sesionActiva",true);
-              navigate("/home");
-            }, duration)
+              navigate("/");
+            }, 2000)
           
           
           localStorage.setItem("firstName",response.data.firstName);
@@ -81,14 +88,19 @@ export default function LoginSignUp({ isLogin }) {
         })
         .catch (e => {
           console.log(e);
+          setSnackbar({
+            status: "error",
+            message: "Datos incorrectos. Verificalos y volvé a ingresarlos.",
+          });
+          setSnackbarVisibility(true);
         })
-        .finally(
+        .finally( () =>{
           setUsuario({
               email: "",
               password: "",
           })
           
-        )
+        })
     } else {
         await axios.post("http://localhost:8080/signUp", {
             firstName: usuarioRegister.firstName,
@@ -97,7 +109,19 @@ export default function LoginSignUp({ isLogin }) {
             password: usuarioRegister.password
         })
         .then(response =>{
-            console.log(response);
+          console.log(response);
+           setLoadingScreen({
+              message: "",
+              duration: 3000,
+            }),
+            setIsLoading(true)
+            setTimeout(() => {
+              setSnackbar({
+                status: "success",
+                message: "Fuiste registrado con éxito.",
+              });
+              setSnackbarVisibility(true);
+            }, 3000)
             navigate("/login");
         })
         .catch(e => {
@@ -135,7 +159,7 @@ export default function LoginSignUp({ isLogin }) {
   };
 
   return (
-      <Container sx={{display:"flex", alignItems:"center", flexDirection:"column", p:5, gap:"20px"}}>
+     <Container sx={{display:"flex", alignItems:"center", flexDirection:"column", p:5}}>
         <Box pb={5}>
           <img src="/assets/bannerAirbnb.png" alt="" style={{height:"120px"}}/>
         </Box>
@@ -277,7 +301,7 @@ export default function LoginSignUp({ isLogin }) {
           </CardContent>
       </Card>
       {!isLogin &&
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "5px" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "5px", pt:3}}>
           <Typography
             variant="p"
             color="black"
@@ -291,13 +315,13 @@ export default function LoginSignUp({ isLogin }) {
             sx={{ cursor: "pointer", textDecoration: "underline" }}
             onClick={handleNavigateLogin}
           >
-            Inicia sesion acá
+            Inicia sesión acá
           </Typography>
         </Box>
       }
 
       {isLogin && 
-        <Box sx={{display:"flex", flexDirection:"column", alignItems:"center", gap:"5px"}}>
+        <Box sx={{display:"flex", flexDirection:"column", alignItems:"center", gap:"5px", pt:3}}>
          <Typography
             variant="p"
             color="black"
@@ -315,6 +339,13 @@ export default function LoginSignUp({ isLogin }) {
           </Typography>
       </Box>
       }
+      {snackbarVisibility && (
+        <GenericSnackbar
+          status={snackbar.status}
+          message={snackbar.message}
+          visibility={snackbarVisibility}
+        />
+      )}
       {isLoading && (
         <LoadingScreen
           message={loadingScreen.message}
