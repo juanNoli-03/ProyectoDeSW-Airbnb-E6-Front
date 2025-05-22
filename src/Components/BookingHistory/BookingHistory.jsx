@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@mui/material";
 import { useParams } from 'react-router-dom';
+import UserService from '../../service/UserService';
 
 export default function BookingHistory() {
  
@@ -15,21 +16,14 @@ export default function BookingHistory() {
 
 useEffect(() => {
   const fetchIdUser = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8080/user/email/${email}`);
-      const userData = response.data;
-
-
-      setUser(userData); // Actualizamos el estado
-      fetchBookingHistory(userData.idUser); // Usamos directamente los datos
-
-
-    } catch (err) {
-      console.error("Error al obtener usuario:", err);
-      setError("Error al cargar el usuario.");
-    } finally {
-      setLoading(false);
-    }
+      UserService.getUserData(email).then((res) => {
+        const userData = res.data;
+        setUser(userData); // Actualizamos el estado
+        fetchBookingHistory(userData.idUser); // Usamos directamente los datos
+      }).catch((err) => {
+        console.error("Error al obtener usuario:", err);
+        setError("Error al cargar el usuario.");
+      }).finally(() => setLoading(false))
   };
 
   const fetchBookingHistory = async (userId) => {

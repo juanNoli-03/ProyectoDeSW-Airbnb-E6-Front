@@ -38,6 +38,10 @@ export default function Header() {
     navigate("/profile");
   };
 
+  const handleNavigateHome= () => {
+    navigate("/home");
+  };
+
   const sesionActiva = localStorage.getItem("sesionActiva") != null;
   const handleLogout = () => {
     const duration = 3000;
@@ -66,7 +70,8 @@ export default function Header() {
         <img
           src="../../../public/assets/bannerAirbnb.png"
           alt=""
-          style={{ height: "35px", width: "110px" }}
+          onClick={handleNavigateHome}
+          style={{ height: "35px", width: "110px", cursor: "pointer" }}
         />
       </Box>
       {isLoading && (
