@@ -44,7 +44,9 @@ export default function LoginSignUp({ isLogin }) {
   const handleNavigateSignUp = () => {
     navigate("/signUp");
   };
-
+  const handleNavigateLogin = () => {
+    navigate("/login");
+  };
   const datosCompletos = (objeto) => {
     return Object.values(objeto).every(
       (valor) => valor !== null && valor !== undefined && valor !== ""
@@ -181,6 +183,19 @@ export default function LoginSignUp({ isLogin }) {
                     size="small"
                     sx={textFieldStyle}
                   />
+                  <TextField
+                    id="dni"
+                    label="DNI"
+                    value={usuarioRegister.dni}
+                    onChange={(e) =>
+                      setUsuarioRegister({
+                        ...usuarioRegister,
+                        dni: e.target.value
+                      })
+                    }
+                    size="small"
+                    sx={textFieldStyle}
+                  />
                 </>
               )}
               <TextField
@@ -204,6 +219,7 @@ export default function LoginSignUp({ isLogin }) {
                 }
                 sx={textFieldStyle}
               />
+                
               <TextField
                   id=""
                   type={passwordVisibility ? "text" : "password"}
@@ -277,6 +293,26 @@ export default function LoginSignUp({ isLogin }) {
               </Button>
           </CardContent>
       </Card>
+      {!isLogin &&
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "5px" }}>
+          <Typography
+            variant="p"
+            color="black"
+          >
+            ¿Ya tenes una cuenta?{"\n"}
+          </Typography>
+          <Typography
+            variant="p"
+            fontWeight="bold"
+            color="#ff5a5f"
+            sx={{ cursor: "pointer", textDecoration: "underline" }}
+            onClick={handleNavigateLogin}
+          >
+            Inicia sesion acá
+          </Typography>
+        </Box>
+      }
+
       {isLogin && 
         <Box sx={{display:"flex", flexDirection:"column", alignItems:"center", gap:"5px"}}>
          <Typography
