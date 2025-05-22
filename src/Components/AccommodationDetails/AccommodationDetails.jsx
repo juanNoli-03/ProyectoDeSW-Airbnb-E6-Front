@@ -30,7 +30,7 @@ export default function AccommodationDetail() {
   return (
     <div>
       <h2>{accommodation.title}</h2>
-      <p>ID: {accommodation.id}</p>
+      <p>ID: {accommodation.idAccommodation}</p>
       <p>Descripción: {accommodation.description}</p>
       {/* Agrega más campos que tengas en el objeto alojamiento */}
     </div>

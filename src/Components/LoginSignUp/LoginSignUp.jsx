@@ -12,7 +12,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import LoadingScreen from "../UI/LoadingScreen/LoadingScreen";
 
 export default function LoginSignUp({ isLogin }) {
-  
+
   const [usuario, setUsuario] = useState({
     email: "",
     password: "",
@@ -52,6 +52,8 @@ export default function LoginSignUp({ isLogin }) {
   };
 
   const manejarEnvio = async () => {
+
+    
     const duration = 2000;
     setIsLoading(false);
     if (isLogin == true) {
@@ -67,8 +69,15 @@ export default function LoginSignUp({ isLogin }) {
             }),
             setIsLoading(true),
             setTimeout(() => {
+              localStorage.setItem("sesionActiva",true);
               navigate("/home");
             }, duration)
+          
+          
+          localStorage.setItem("firstName",response.data.firstName);
+          localStorage.setItem("lastName",response.data.lastName);
+          localStorage.setItem("email",response.data.email);
+          localStorage.setItem("dni",response.data.dni);
         })
         .catch (e => {
           console.log(e);
@@ -78,6 +87,7 @@ export default function LoginSignUp({ isLogin }) {
               email: "",
               password: "",
           })
+          
         )
     } else {
         await axios.post("http://localhost:8080/signUp", {

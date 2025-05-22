@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
   const [accommodations, setAccommodations] = useState([]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,12 +19,14 @@ export default function Home() {
     fetchAccommodations();
   }, []);
 
+  console.log(localStorage.getItem("sesionActiva") ==null  );
   const handleClick = (accommodation) => {
     navigate(`/accommodationDetails/${accommodation.idAccommodation}`);
   };
 
   return (
     <>
+
       {accommodations.map((accommodation) => (
         <div key={accommodation.id}>
           {accommodation.id} -{" "}
@@ -35,6 +38,7 @@ export default function Home() {
           </span>
         </div>
       ))}
+
     </>
   );
 }

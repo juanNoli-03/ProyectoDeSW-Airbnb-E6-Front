@@ -4,16 +4,19 @@ import Page from "./Components/UI/Page";
 import LoginSignUp from './Components/LoginSignUp/LoginSignUp';
 import Home from './Components/Home/Home';
 import AccommodationDetails from './Components/AccommodationDetails/AccommodationDetails';
+import Profile from './Components/Profile/Profile';
+
 
 function App() {
   return (
     <Router>
     <Page>
         <Routes>
-          <Route path="/" element={<LoginSignUp isLogin={true} />} />
+          <Route path="/login" element={<LoginSignUp isLogin={true} />} />
           <Route path="/signUp" element={<LoginSignUp isLogin={false} />} />
-          <Route path="/home" element={<Home/>} />
-         <Route path="/accommodationDetails/:id" element={<AccommodationDetails />} />
+          <Route path="/" element={<Home/>} />
+          <Route path="/profile" element={<Profile/>} />          
+          <Route path="/accommodationDetails/:id" element={<AccommodationDetails />} />
           <Route path="*" element={<Navigate to="/" replace />} />
           
         </Routes>
