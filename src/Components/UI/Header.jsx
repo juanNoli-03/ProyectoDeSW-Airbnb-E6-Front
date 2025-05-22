@@ -34,6 +34,10 @@ export default function Header() {
     navigate("/login");
   };
 
+   const handleNavigateProfile= () => {
+    navigate("/profile");
+  };
+
   const sesionActiva = localStorage.getItem("sesionActiva") != null;
   const handleLogout = () => {
     const duration = 3000;
@@ -100,7 +104,7 @@ export default function Header() {
         >
           {sesionActiva ? (
             <>
-              <MenuItem sx={{ fontSize: "14px" }}>
+              <MenuItem sx={{ fontSize: "14px" }} onClick={handleNavigateProfile} >
                 <ListItemIcon>
                   <PersonIcon fontSize="medium" sx={{ color: "black" }} />
                 </ListItemIcon>
