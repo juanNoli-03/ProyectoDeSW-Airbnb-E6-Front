@@ -10,6 +10,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ListItemIcon from "@mui/material/ListItemIcon";
 import PersonIcon from "@mui/icons-material/Person";
 import Divider from "@mui/material/Divider";
+import { Link } from 'react-router-dom';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -66,6 +67,7 @@ export default function Header() {
         p: 1,
       }}
     >
+      <Link to="/">
       <Box>
         <img
           src="../../../public/assets/bannerAirbnb.png"
@@ -74,6 +76,8 @@ export default function Header() {
           style={{ height: "35px", width: "110px", cursor: "pointer" }}
         />
       </Box>
+      </Link>
+
       {isLoading && (
         <LoadingScreen
           message={loadingScreen.message}
