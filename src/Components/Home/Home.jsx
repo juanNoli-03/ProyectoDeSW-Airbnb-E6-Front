@@ -1,104 +1,148 @@
 import { useEffect, useState } from 'react';
 import axios from "axios";
-import { Link, useNavigate } from 'react-router-dom';
-import { dialogClasses } from '@mui/material';
+import { Box, Container, Divider } from '@mui/material';
+import StarIcon from '@mui/icons-material/Star';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+
+
 
 export default function Home() {
-  const [accommodations, setAccommodations] = useState([]);
+  const [accommodationsSudamerica, setAccommodationsSudamerica] = useState([]);
+  const [accommodationsEuropa, setAccommodationsEuropa] = useState([]);
+  const [accommodationsAsia, setAccommodationsAsia] = useState([]);
 
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
+
+  const fetchAccommodationsSudamerica = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/accommodationsByContinent/Sudamérica");
+      setAccommodationsSudamerica(response.data);
+    } catch (error) {
+      console.error("Error fetching accommodations:", error);
+    }
+  };
+
+  const fetchAccommodationsEuropa = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/accommodationsByContinent/Europa");
+      setAccommodationsEuropa(response.data);
+    } catch (error) {
+      console.error("Error fetching accommodations:", error);
+    }
+  };
+
+  const fetchAccommodationsAsia = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/accommodationsByContinent/Asia");
+      setAccommodationsAsia(response.data);
+    } catch (error) {
+      console.error("Error fetching accommodations:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchAccommodations = async () => {
-      try {
-        const response = await axios.get("http://localhost:8080/accommodations");
-        setAccommodations(response.data);
-      } catch (error) {
-        console.error("Error fetching accommodations:", error);
-      }
-    };
-    fetchAccommodations();
+    fetchAccommodationsSudamerica();
+    fetchAccommodationsEuropa();
+    fetchAccommodationsAsia();
   }, []);
-
-  console.log(localStorage.getItem("sesionActiva") ==null  );
-  const handleClick = (accommodation) => {
-    navigate(`/accommodationDetails/${accommodation.idAccommodation}`);
-  };
 
   return (
     <>
+      <Container sx={{display:"flex", flexDirection:"column", m:2, p:3}}>
+        <Box>
+          <h1>Alojamientos populares en Sudamérica</h1>
+        </Box>
+        <Box>
+          <Divider sx={{p:0.5, width:"118%",  borderBottomWidth: 2}}></Divider>
+        </Box>
+        <Box sx={{display:"flex", flexDirection:"row", flexWrap:"wrap", pt:2, gap:"30px", width:"120%"}}> 
+          {accommodationsSudamerica.map((accommodation) => (
+            <Box sx={{display:"flex", flexDirection:"column", gap:"5px", cursor:"pointer"}}>
+              <img src={`../../../public/assets/${accommodation.imageUrl}.jpg`} alt="" style={{borderRadius:"15px", width:"250px", 
+                height:"220px"}} 
+              />
+              <h5>{accommodation.title}</h5>
+              <Divider sx={{backgroundColor:"#ff5a5f"}}></Divider>
+              <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
+                <Box>
+                  <p style={{fontSize:"13px", color:"grey"}}><b>${accommodation.pricePerNight}</b> USD <p>por noche</p></p>
+                </Box>
+                 <Box>
+                    <FavoriteBorderIcon sx={{color:"grey", fontSize:"20px", "&:hover":{color:"red"}}}></FavoriteBorderIcon>
+                    <Box sx={{display:"flex", alignItems:"center", flexDirection:"row", gap:"2px"}}>
+                      <StarIcon sx={{fontSize:"15px", color:"gold"}}></StarIcon>
+                      <p style={{fontSize:"13px", color:"grey"}}>5</p>
+                    </Box>
+                </Box>
+              </Box>
+            </Box>
+          ))}          
+        </Box>
+      </Container>
 
+       <Container sx={{display:"flex", flexDirection:"column", m:2, p:3}}>
+        <Box>
+          <h1>Alojamientos populares en Europa</h1>
+        </Box>
+        <Box>
+          <Divider sx={{p:0.5, width:"118%",  borderBottomWidth: 2}}></Divider>
+        </Box>
+        <Box sx={{display:"flex", flexDirection:"row", flexWrap:"wrap", pt:2, gap:"30px", width:"120%"}}> 
+          {accommodationsEuropa.map((accommodation) => (
+            <Box sx={{display:"flex", flexDirection:"column", gap:"5px", cursor:"pointer"}}>
+              <img src={`../../../public/assets/${accommodation.imageUrl}.jpg`} alt="" style={{borderRadius:"15px", width:"250px", 
+                height:"220px"}} 
+              />
+              <h5>{accommodation.title}</h5>
+              <Divider sx={{backgroundColor:"#ff5a5f"}}></Divider>
+              <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
+                <Box>
+                  <p style={{fontSize:"13px", color:"grey"}}><b>${accommodation.pricePerNight}</b> USD <p>por noche</p></p>
+                </Box>
+                 <Box>
+                    <FavoriteBorderIcon sx={{color:"grey", fontSize:"20px", "&:hover":{color:"red"}}}></FavoriteBorderIcon>
+                    <Box sx={{display:"flex", alignItems:"center", flexDirection:"row", gap:"2px"}}>
+                      <StarIcon sx={{fontSize:"15px", color:"gold"}}></StarIcon>
+                      <p style={{fontSize:"13px", color:"grey"}}>5</p>
+                    </Box>
+                </Box>
+              </Box>
+            </Box>
+          ))}          
+        </Box>
+      </Container>
 
-      <div   style={{padding:"55px"}}>
-
-            <div style={{marginLeft: "250px", marginRight:"250px", border: 
-              "2px solid #ccc", borderRadius:"40px",padding:"25px", display:"flex",
-              boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.2)"}}> 
-              
-              <div style={{marginLeft:"20px"}}>
-              <p>pongan filtros</p>
-              </div>
-              <div style={{marginLeft:"20px"}}>
-              <p>muertos</p>
-              </div>
-              <div style={{marginLeft:"20px"}}>
-              <p>aguante chaca</p>
-              </div>
-              <div style={{marginLeft:"20px"}}>
-                <img
-                src="../../../public/assets/chaca.png"
-                 alt=""
-                  style={{ height: "35px", width: "110px" }}
-                 />
-              </div>
-
-            </div>
-
-     </div>
-
-
-    <h1 style={{marginLeft:"20px", marginBottom:"30px"}}>Alojamientos disponibles</h1>
-    
-   <div style={{ marginLeft:"100px", display: "flex", flexWrap: "wrap", gap: "30px" }}>
-       {accommodations.map((accommodation) => (
-
-      <div
-      key={accommodation.idAccommodation}
-      onClick={() => handleClick(accommodation)}
-      style={{
-        border: "1px solid #ccc",
-        padding: "16px",
-        width: "250px",
-        cursor: "pointer",
-        marginBottom: "16px",
-        borderRadius: "8px"
-      }}
-    >
-        <div style={{
-        border: "1px solid #ccc",
-        padding: "70px",
-        marginLeft:"20px",
-        marginRight:"20px",
-        cursor: "pointer",
-        marginBottom: "16px",
-        borderRadius: "8px"
-      }}>
-
-          <p>FOTO</p>
-
-        </div>
-
-      <h3>{accommodation.title}</h3>
-      <p>Descripción: {accommodation.description}</p>
-      <p>Ubicación: {accommodation.city}, {accommodation.country}</p>
-      <p>Precio por noche: ${accommodation.pricePerNight}</p>
-    </div>
-  )     )}
-  </div>
-  
+      <Container sx={{display:"flex", flexDirection:"column", m:2, p:3}}>
+        <Box>
+          <h1>Alojamientos populares en Asia</h1>
+        </Box>
+        <Box>
+          <Divider sx={{p:0.5, width:"118%",  borderBottomWidth: 2}}></Divider>
+        </Box>
+        <Box sx={{display:"flex", flexDirection:"row", flexWrap:"wrap", pt:2, gap:"30px", width:"120%"}}> 
+          {accommodationsAsia.map((accommodation) => (
+            <Box sx={{display:"flex", flexDirection:"column", gap:"5px", cursor:"pointer"}}>
+              <img src={`../../../public/assets/${accommodation.imageUrl}.jpg`} alt="" style={{borderRadius:"15px", width:"250px", 
+                height:"220px"}} 
+              />
+              <h5>{accommodation.title}</h5>
+              <Divider sx={{backgroundColor:"#ff5a5f"}}></Divider>
+              <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
+                <Box>
+                  <p style={{fontSize:"13px", color:"grey"}}><b>${accommodation.pricePerNight}</b> USD <p>por noche</p></p>
+                </Box>
+                 <Box>
+                    <FavoriteBorderIcon sx={{color:"grey", fontSize:"20px", "&:hover":{color:"red"}}}></FavoriteBorderIcon>
+                    <Box sx={{display:"flex", alignItems:"center", flexDirection:"row", gap:"2px"}}>
+                      <StarIcon sx={{fontSize:"15px", color:"gold"}}></StarIcon>
+                      <p style={{fontSize:"13px", color:"grey"}}>5</p>
+                    </Box>
+                </Box>
+              </Box>
+            </Box>
+          ))}          
+        </Box>
+      </Container>
     </>
-
-  
-
   );
 }
