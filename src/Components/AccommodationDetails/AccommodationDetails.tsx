@@ -60,7 +60,7 @@ const AccommodationDetail = () => {
       endDate: end.toISOString().split('.')[0],
       numberOfGuests,
       numberOfNights: nights,
-      finalAmount: nights * accommodation.pricePerNight,
+      finalAmount: (nights * accommodation.pricePerNight),
       paymentMethod,
       rating: 0,
       accommodation: { idAccommodation: Number(accommodationId) },

@@ -3,6 +3,7 @@ import axios from "axios";
 import { Box, Container, Divider } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -11,7 +12,11 @@ export default function Home() {
   const [accommodationsEuropa, setAccommodationsEuropa] = useState([]);
   const [accommodationsAsia, setAccommodationsAsia] = useState([]);
 
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const handleAccommodationDetail = (id) =>{
+    navigate(`/accommodationDetails/${id}`);
+  }
 
   const fetchAccommodationsSudamerica = async () => {
     try {
@@ -48,16 +53,16 @@ export default function Home() {
 
   return (
     <>
-      <Container sx={{display:"flex", flexDirection:"column", m:2, p:3}}>
+      <Container sx={{display:"flex", flexDirection:"column", m:2, p:3}}  >
         <Box>
           <h1>Alojamientos populares en Sudamérica</h1>
         </Box>
         <Box>
           <Divider sx={{p:0.5, width:"118%",  borderBottomWidth: 2}}></Divider>
         </Box>
-        <Box sx={{display:"flex", flexDirection:"row", flexWrap:"wrap", pt:2, gap:"30px", width:"120%"}}> 
+        <Box sx={{display:"flex", flexDirection:"row", flexWrap:"wrap", pt:2, gap:"30px", width:"120%"}} > 
           {accommodationsSudamerica.map((accommodation) => (
-            <Box sx={{display:"flex", flexDirection:"column", gap:"5px", cursor:"pointer"}}>
+            <Box sx={{display:"flex", flexDirection:"column", gap:"5px", cursor:"pointer"}} onClick={()=>{handleAccommodationDetail(accommodation.idAccommodation)}} >
               <img src={`../../../public/assets/${accommodation.imageUrl}.jpg`} alt="" style={{borderRadius:"15px", width:"250px", 
                 height:"220px"}} 
               />
@@ -65,7 +70,7 @@ export default function Home() {
               <Divider sx={{backgroundColor:"#ff5a5f"}}></Divider>
               <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
                 <Box>
-                  <p style={{fontSize:"13px", color:"grey"}}><b>${accommodation.pricePerNight}</b> USD <p>por noche</p></p>
+                  <p style={{fontSize:"13px", color:"grey"}}><b>${accommodation.pricePerNight}</b> USD por noche</p>
                 </Box>
                  <Box>
                     <FavoriteBorderIcon sx={{color:"grey", fontSize:"20px", "&:hover":{color:"red"}}}></FavoriteBorderIcon>
@@ -97,7 +102,7 @@ export default function Home() {
               <Divider sx={{backgroundColor:"#ff5a5f"}}></Divider>
               <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
                 <Box>
-                  <p style={{fontSize:"13px", color:"grey"}}><b>${accommodation.pricePerNight}</b> USD <p>por noche</p></p>
+                  <p style={{fontSize:"13px", color:"grey"}}><b>${accommodation.pricePerNight}</b> USD por noche</p>
                 </Box>
                  <Box>
                     <FavoriteBorderIcon sx={{color:"grey", fontSize:"20px", "&:hover":{color:"red"}}}></FavoriteBorderIcon>
@@ -129,7 +134,7 @@ export default function Home() {
               <Divider sx={{backgroundColor:"#ff5a5f"}}></Divider>
               <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
                 <Box>
-                  <p style={{fontSize:"13px", color:"grey"}}><b>${accommodation.pricePerNight}</b> USD <p>por noche</p></p>
+                  <p style={{fontSize:"13px", color:"grey"}}><b>${accommodation.pricePerNight}</b> USD por noche</p>
                 </Box>
                  <Box>
                     <FavoriteBorderIcon sx={{color:"grey", fontSize:"20px", "&:hover":{color:"red"}}}></FavoriteBorderIcon>

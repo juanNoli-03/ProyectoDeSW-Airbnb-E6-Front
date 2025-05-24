@@ -65,12 +65,12 @@ return (
           marginBottom: "1rem",
           borderRadius: "8px"
         }}>
-          <p><strong>ID:</strong> {booking.id}</p>
+          <p><strong>Propiedad:</strong> {booking.accommodation.title}</p>
           <p><strong>Fecha de inicio:</strong> {new Date(booking.startDate).toLocaleString()}</p>
           <p><strong>Fecha de fin:</strong> {new Date(booking.endDate).toLocaleString()}</p>
           <p><strong>Número de huéspedes:</strong> {booking.numberOfGuests}</p>
           <p><strong>Noches:</strong> {booking.numberOfNights}</p>
-          <p><strong>Monto final:</strong> ${booking.final_amount}</p>
+          <p><strong>Monto final:</strong> ${booking.finalAmount}</p>
           <p><strong>Método de pago:</strong> {booking.paymentMethod}</p>
           <p><strong>Rating:</strong> {booking.rating} ⭐</p>
         </div>
