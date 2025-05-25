@@ -64,7 +64,7 @@ export default function Header() {
         flexDirection: "row",
         justifyContent: "space-between",
         borderBottom: "solid 3px #ff5a5f",
-        p: 1,
+        p:2,
       }}
     >
       <Link to="/">

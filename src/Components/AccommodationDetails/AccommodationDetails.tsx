@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AccomodationService from '../../service/AccomodationService';
 import BookingService from '../../service/BookingService';
 import { Accommodation } from '../../model/Accomodation';
 import { PaymentMethod, Booking } from '../../model/Booking';
 import UserService from '../../service/UserService';
+import { GridLegacy as Grid } from '@mui/material';
+
 
 const AccommodationDetail = () => {
   const { id: accommodationId } = useParams();
@@ -91,17 +93,40 @@ const AccommodationDetail = () => {
   if (error) return <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>;
   if (!accommodation) return <p style={{ textAlign: 'center' }}>No se encontró el alojamiento.</p>;
 
+  const images: string[] = [
+    `../../../public/assets/${accommodation.imageUrl}/${accommodation.imageUrl}.jpg`,
+    `../../../public/assets/${accommodation.imageUrl}/${accommodation.imageUrl}.1.jpg`,
+    `../../../public/assets/${accommodation.imageUrl}/${accommodation.imageUrl}.2.jpg`,
+    `../../../public/assets/${accommodation.imageUrl}/${accommodation.imageUrl}.3.jpg`,
+    `../../../public/assets/${accommodation.imageUrl}/${accommodation.imageUrl}.4.jpg`,
+  ];
+
   return (
     <div style={{ maxWidth: '900px', margin: '2rem auto', padding: '1rem' }}>
       <h2 style={{ marginBottom: 10 }}>{accommodation.title}</h2>
       {accommodation.imageUrl && (
-        <div style={{ textAlign: 'center', marginBottom: '15px' }}>
+      <Grid container spacing={1} sx={{pt:2, pb:2}}>
+        <Grid item xs={12} md={6}>
           <img
-            src={accommodation.imageUrl}
+            src={`../../../public/assets/${accommodation.imageUrl}/${accommodation.imageUrl}.jpg`}
             alt={accommodation.title}
-            style={{ width: '100%', height: '400px', objectFit: 'cover', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+            style={{ width: '100%', height:"100%", objectFit: 'cover', borderRadius: '5px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
           />
-        </div>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Grid container spacing={1}>
+            {images.slice(1).map((img: string, index: number) => (
+              <Grid item xs={6} key={index}>
+                  <img
+                    src={img}
+                    alt={accommodation.title}
+                    style={{ width: '100%', height:"200px", objectFit: 'cover', borderRadius: '5px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                  />
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
+      </Grid>
       )}
 
       <div style={{ display: 'flex', justifyContent: 'space-between', gap: '2rem', flexWrap: 'wrap' }}>
