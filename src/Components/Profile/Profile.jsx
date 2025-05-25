@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@mui/material";
 export default function Profile() {

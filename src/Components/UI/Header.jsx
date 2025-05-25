@@ -9,6 +9,7 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from '@mui/icons-material/Menu';
 import ListItemIcon from "@mui/material/ListItemIcon";
 import PersonIcon from "@mui/icons-material/Person";
+import Avatar from '@mui/material/Avatar';
 import Divider from "@mui/material/Divider";
 import { Link } from 'react-router-dom';
 
@@ -99,7 +100,17 @@ export default function Header() {
           aria-expanded={open ? "true" : undefined}
           onClick={handleClick}
         >
-          <MenuIcon sx={{ color: "#ff5a5f", fontSize: "30px" }} />
+          {sesionActiva ? (
+            <Avatar
+            sx={{backgroundColor:"black"}}
+            alt="Remy Sharp"
+            src="/broken-image.jpg"
+            >
+              {localStorage.getItem("firstName").charAt(0)}
+            </Avatar>
+          ) : (
+            <MenuIcon sx={{ color: "black", fontSize: "30px" }} />
+          )}
         </IconButton>
         <Menu
           id="fade-menu"
