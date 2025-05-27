@@ -20,7 +20,6 @@ function App() {
           <Route path="/bookingHistory" element={<BookingHistory/>} />         
           <Route path="/accommodationDetails/:id" element={<AccommodationDetails />} />
           <Route path="*" element={<Navigate to="/" replace />} />
-          
         </Routes>
     </Page>
     </Router>

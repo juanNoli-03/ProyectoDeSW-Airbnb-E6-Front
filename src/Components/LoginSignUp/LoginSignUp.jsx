@@ -11,6 +11,7 @@ import axios from "axios";
 import CheckIcon from "@mui/icons-material/Check";
 import LoadingScreen from "../UI/LoadingScreen/LoadingScreen";
 import GenericSnackbar from "../UI/Snackbar/Snackbar";
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 
 export default function LoginSignUp({ isLogin }) {
 
@@ -52,6 +53,9 @@ export default function LoginSignUp({ isLogin }) {
   };
   const handleNavigateLogin = () => {
     navigate("/login");
+  };
+  const handleVisitante = () => {
+    navigate("/");
   };
   const datosCompletos = (objeto) => {
     return Object.values(objeto).every(
@@ -160,8 +164,12 @@ export default function LoginSignUp({ isLogin }) {
 
   return (
      <Container sx={{display:"flex", alignItems:"center", flexDirection:"column", p:5}}>
-        <Box pb={5}>
+        <Box pb={3}>
           <img src="/assets/bannerAirbnb.png" alt="" style={{height:"120px"}}/>
+        </Box>
+        <Box pb={3}>
+          <Button variant="contained"  onClick={handleVisitante} endIcon={<LockOpenIcon></LockOpenIcon>} sx={{borderRadius:"5px", backgroundColor: "#ff5a5f", fontWeight:"bold" }}>
+            Soy visitante!</Button>
         </Box>
         <Card variant="elevation" elevation={5} sx={{backgroundColor:"#fffff", borderRadius:"3px"}}>
           <CardContent sx={{display:"flex", flexDirection:"column", gap:"30px", p:5}}>
