@@ -4,6 +4,8 @@ import { Button } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
 import UserService from '../../service/UserService';
 import BookingService from '../../service/BookingService';
+import BookingDetail from '../../Components/UI/Modals/BookingDetail';
+
 
 export default function Profile() {
   const [hoverSobreMi, setHoverSobreMi] = useState(false);
@@ -21,6 +23,23 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
+  const [booking, setBooking] = useState({
+        idBooking: "",
+        startDate: "",
+        endDate: "",
+        numberOfGuests: "",
+        numberOfNights: "",
+        finalAmount: "",
+        paymentMethod: "",
+        rated:"",
+        accommodation: {
+            idAccommodation: ""
+        },
+        user: {
+            idUser: ""
+        },
+  });
+
 
   const email = localStorage.getItem("email");
 
@@ -81,26 +100,38 @@ export default function Profile() {
 
     fetchIdUser();
   }, []);
+  
+  const handleAccommodationDetail = (id) =>{
+    navigate(`/accommodationDetails/${id}`);
+  }
 
+  //
+  const [bookingDetail, setBookingDetail] = useState(false);
+  const closeBookingDetail = () => {
+    setBookingDetail(false);
+  };
+  const openBookingDetail = (booking) => {
+    setBooking(booking);
+    setBookingDetail(true);
+  };
+
+  
   //Para no cargar tanto el return
   const renderBookingCard = (booking,  showRateButton) => (
 
   <div>
-  <img src={`../../../public/assets/${booking.accommodation.imageUrl}/${booking.accommodation.imageUrl}.jpg`} alt="" style={{borderRadius:"15px", width:"250px", 
-                height:"220px", cursor:"pointer"}} //onClick={()=> handleAccommodationDetail(accommodation.idAccommodation)} 
-              />
     <p><strong>Propiedad:</strong> {booking.accommodation.title}</p>
-    <p><strong>Fecha de inicio:</strong> {new Date(booking.startDate).toLocaleString()}</p>
-    <p><strong>Fecha de fin:</strong> {new Date(booking.endDate).toLocaleString()}</p>
-    <p><strong>Número de huéspedes:</strong> {booking.numberOfGuests}</p>
-    <p><strong>Noches:</strong> {booking.numberOfNights}</p>
-    <p><strong>Monto final:</strong> ${booking.finalAmount}</p>
-    <p><strong>Método de pago:</strong> {booking.paymentMethod}</p>
-    <p><strong>Rating:</strong> {booking.accommodation.rating} ⭐</p>
+    <img src={`../../../public/assets/${booking.accommodation.imageUrl}/${booking.accommodation.imageUrl}.jpg`} alt="" style={{borderRadius:"15px", width:"250px", 
+                height:"220px", cursor:"pointer"}} onClick={()=> handleAccommodationDetail(booking.accommodation.idAccommodation)} 
+              />
     
+      <button onClick={()=>openBookingDetail(booking)} >
+        Ver detalle
+      </button>
     {showRateButton && !booking.rated && (
-      <button >
-        Calificar
+    
+      <button>
+        Calificar Estadía
       </button>
     )}
   </div>
@@ -266,7 +297,15 @@ export default function Profile() {
                     ) : (
                       <p>No tienes reservas futuras.</p>
                     )}
-               </div>   
+                 
+          
+                      <BookingDetail
+                        mostrarAlerta={bookingDetail}
+                        closeAlerta={closeBookingDetail}
+                        booking={booking}
+                        mensajeAlerta="Vas a ver un detalle"
+                      />
+          </div> 
           )}
         </div>
       )}

@@ -30,7 +30,7 @@ export const Header = ({ setFilters }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingScreen, setLoadingScreen] = useState({
     message: "",
-    duration: null,
+    duration: 0,
   });
 
   const executeFilters = () => {
@@ -193,7 +193,7 @@ export const Header = ({ setFilters }: Props) => {
                   onChange={handleChangePais}
                   autoWidth
                   label="Pais"
-                  size="Medium"
+                  size="medium"
                   sx={selectStyle}
                 >
                 <MenuItem value={"No aplica"}>No aplica</MenuItem>
@@ -288,10 +288,9 @@ export const Header = ({ setFilters }: Props) => {
                 <ListItemIcon>
                   <Logout
                     fontSize="medium"
-                    fontColor="#6655D9"
                     sx={{ color: "black" }}
                     onClick={handleLogout}
-                  />
+                  /> 
                 </ListItemIcon>
                 Cerrar Sesión
               </MenuItem>
