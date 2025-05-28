@@ -1,8 +1,9 @@
+import React from "react";
 import { Box, IconButton, Typography } from "@mui/material";
 import Logout from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
-import LoadingScreen from "../UI/LoadingScreen/LoadingScreen";
+import LoadingScreen from "./LoadingScreen/LoadingScreen";
 import { useState } from "react";
 import Fade from "@mui/material/Fade";
 import Menu from "@mui/material/Menu";
@@ -18,16 +19,32 @@ import Select from '@mui/material/Select';
 import SearchIcon from '@mui/icons-material/Search';
 import Slider from '@mui/material/Slider';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import { AccommodationFilters } from "../../model/AccommodationFilters";
 
-export default function Header() {
+interface Props{
+  setFilters: (filtersValue: AccommodationFilters) => void;
+}
+
+export const Header = ({ setFilters }: Props) => {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
-
   const [loadingScreen, setLoadingScreen] = useState({
     message: "",
     duration: null,
   });
+
+  const executeFilters = () => {
+    const filters: AccommodationFilters = {
+      continent: continente ?? null,
+      country: pais ?? null,
+      city: null,
+      available: true,
+      sortByPriceDesc: false,
+    }
+
+    setFilters(filters);
+  }
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -53,12 +70,14 @@ export default function Header() {
   const [continente, setContinente] = useState('');
 
   const handleChangeContinente = (event) => {
+    console.log("continent -> ", event.target.value)
     setContinente(event.target.value);
   };
 
   const [pais, setPais] = useState('');
 
   const handleChangePais = (event) => {
+    console.log("pais -> ", event.target.value)
     setPais(event.target.value);
   };
 
@@ -146,10 +165,10 @@ export default function Header() {
         borderRadius:"45px", p:1, pl:2, pr:2, gap:"10px"}}>
         <Box>
            <FormControl sx={selectStyle}>
-                <InputLabel id="demo-simple-select-autowidth-label" sx={selectStyle}>Continente</InputLabel>
+                <InputLabel id="continente-label" sx={selectStyle}>Continente</InputLabel>
                 <Select
-                  labelId="demo-simple-select-autowidth-label"
-                  id="demo-simple-select-autowidth"
+                  labelId="continente-label"
+                  id="continente-select-autowidth"
                   value={continente}
                   onChange={handleChangeContinente}
                   autoWidth
@@ -167,10 +186,10 @@ export default function Header() {
           <Divider orientation="vertical" flexItem />
         <Box>
            <FormControl sx={selectStyle}>
-              <InputLabel id="demo-simple-select-autowidth-label" sx={selectStyle}>País</InputLabel>
+              <InputLabel id="pais-label" sx={selectStyle}>País</InputLabel>
                 <Select
-                  labelId="demo-simple-select-autowidth-label"
-                  id="demo-simple-select-autowidth"
+                  labelId="pais-label"
+                  id="pais-select-autowidth"
                   value={pais}
                   onChange={handleChangePais}
                   autoWidth
@@ -179,12 +198,12 @@ export default function Header() {
                   sx={selectStyle}
                 >
                 <MenuItem value={"No aplica"}>No aplica</MenuItem>
-                <MenuItem value={"Sudamerica"}>Argentina</MenuItem>
-                <MenuItem value={"Europa"}>Brasil</MenuItem>
-                <MenuItem value={"Asia"}>Colombia</MenuItem>
-                <MenuItem value={"Sudamerica"}>España</MenuItem>
-                <MenuItem value={"Europa"}>Francia</MenuItem>
-                <MenuItem value={"Asia"}>Italia</MenuItem>
+                <MenuItem value={"Argentina"}>Argentina</MenuItem>
+                <MenuItem value={"Brasil"}>Brasil</MenuItem>
+                <MenuItem value={"Colombia"}>Colombia</MenuItem>
+                <MenuItem value={"España"}>España</MenuItem>
+                <MenuItem value={"Francia"}>Francia</MenuItem>
+                <MenuItem value={"Italia"}>Italia</MenuItem>
               </Select>
             </FormControl>
         </Box>
@@ -209,7 +228,7 @@ export default function Header() {
         </Box>
           <Divider orientation="vertical" flexItem />
         <Box>
-          <SearchIcon fontSize="large" sx={{color:"white", backgroundColor:"#ff5a5f", padding:"8px", borderRadius:"20px", cursor:"pointer"}}></SearchIcon>
+          <SearchIcon onClick={executeFilters} fontSize="large" sx={{color:"white", backgroundColor:"#ff5a5f", padding:"8px", borderRadius:"20px", cursor:"pointer"}}></SearchIcon>
         </Box>
       </Box>
 
@@ -241,7 +260,7 @@ export default function Header() {
             alt="Remy Sharp"
             src="/broken-image.jpg"
             >
-              {localStorage.getItem("firstName").charAt(0)}
+              {localStorage.getItem("firstName")?.charAt(0)}
             </Avatar>
           ) : (
             <MenuIcon sx={{ color: "black", fontSize: "30px" }} />
@@ -293,3 +312,5 @@ export default function Header() {
     </Box>
   );
 }
+
+export default Header;

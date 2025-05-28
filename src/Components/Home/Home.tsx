@@ -1,17 +1,32 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
 import axios from "axios";
 import { Box, Container, Divider } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useNavigate } from 'react-router-dom';
+import { AccommodationFilters } from '../../model/AccommodationFilters';
+import AccomodationService from '../../service/AccomodationService';
+import { Accommodation } from '../../model/Accomodation';
 
+interface Props{
+  filters: AccommodationFilters
+}
 
-export default function Home() {
-  const [accommodationsSudamerica, setAccommodationsSudamerica] = useState([]);
-  const [accommodationsEuropa, setAccommodationsEuropa] = useState([]);
-  const [accommodationsAsia, setAccommodationsAsia] = useState([]);
-
+export default function Home({filters}: Props) {
+  const [accommodationsSudamerica, setAccommodationsSudamerica] = useState<Accommodation[]>([]);
+  const [accommodationsEuropa, setAccommodationsEuropa] = useState<Accommodation[]>([]);
+  const [accommodationsAsia, setAccommodationsAsia] = useState<Accommodation[]>([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!filters) return;
+    console.log("Updated filters in Home -> ", filters)
+    AccomodationService.filterAccommodations(filters).then((res) => {
+      console.log("Filtered accommodations response:", res.data);  
+    });
+    
+  }, [filters])
 
   const handleAccommodationDetail = (id) =>{
     navigate(`/accommodationDetails/${id}`);
@@ -60,8 +75,8 @@ export default function Home() {
           <Divider sx={{p:0.5, width:"118%",  borderBottomWidth: 2}}></Divider>
         </Box>
         <Box sx={{display:"flex", flexDirection:"row", flexWrap:"wrap", pt:2, gap:"30px", width:"120%"}} > 
-          {accommodationsSudamerica.map((accommodation) => (
-            <Box sx={{display:"flex", flexDirection:"column", gap:"5px"}}>
+          {accommodationsSudamerica.map((accommodation, index) => (
+            <Box key={index} sx={{display:"flex", flexDirection:"column", gap:"5px"}}>
               <img src={`../../../public/assets/${accommodation.imageUrl}/${accommodation.imageUrl}.jpg`} alt="" style={{borderRadius:"15px", width:"250px", 
                 height:"220px", cursor:"pointer"}} onClick={()=> handleAccommodationDetail(accommodation.idAccommodation)} 
               />
