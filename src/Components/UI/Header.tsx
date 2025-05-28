@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, IconButton, Typography } from "@mui/material";
 import Logout from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";

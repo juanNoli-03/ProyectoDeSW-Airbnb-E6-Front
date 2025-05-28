@@ -8,4 +8,12 @@ export class Accommodation {
     pricePerNight: number;
     available: boolean;
     imageUrl: string;
+    numberOfGuests: number;
+    accommodationDetail: AccommodationDetail;
+}
+
+export class AccommodationDetail {
+    rooms: number;
+    beds: number;
+    bathrooms: number;
 }

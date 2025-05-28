@@ -6,7 +6,8 @@ import BookingService from '../../service/BookingService';
 import { Accommodation } from '../../model/Accomodation';
 import { PaymentMethod, Booking } from '../../model/Booking';
 import UserService from '../../service/UserService';
-import { GridLegacy as Grid } from '@mui/material';
+import { Divider, GridLegacy as Grid } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
 
 
 const AccommodationDetail = () => {
@@ -21,6 +22,7 @@ const AccommodationDetail = () => {
   const [bookingSuccess, setBookingSuccess] = useState<string | null>(null);
   const email = localStorage.getItem("email");
   const [userData, setUserData] = useState<any>();
+  const[randomUserData, setRandomUserData] = useState<any>();
 
   useEffect(() => {
     if (accommodationId) fetchAccommodation();
@@ -44,6 +46,21 @@ const AccommodationDetail = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchRandomUser = async () => {
+      try {
+        const res = await UserService.getRandomUser();
+        console.log(res.data.results[0]);
+        setRandomUserData(res.data.results[0]);
+      } catch {
+        setError("No se pudo cargar el alojamiento.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRandomUser();
+  }, [])
 
   const handleBooking = async () => {
     if (!accommodation || !startDate || !endDate || !userData) return;
@@ -131,11 +148,19 @@ const AccommodationDetail = () => {
       )}
 
       <div style={{ display: 'flex', justifyContent: 'space-between', gap: '2rem', flexWrap: 'wrap' }}>
-        <div style={{ flex: '1 1 60%' }}>
-          <p><strong>Vivienda para alquiler ubicada en {accommodation.city}, {accommodation.country}</strong></p>
-          {renderStars(4)}
-          <hr />
-          <p>{accommodation.description}</p>
+        <div style={{ flex: '1 1 60%'}}>
+          <h2><strong>Vivienda para alquiler ubicada en {accommodation.city}, {accommodation.country}</strong></h2>
+          <h3 style={{fontWeight:"400", paddingTop:"5px"}}>
+            {accommodation.numberOfGuests} huéspedes - {accommodation.accommodationDetail.rooms} dormitorios - {accommodation.accommodationDetail.beds} camas - {accommodation.accommodationDetail.bathrooms} baños. 
+          </h3>
+          <Divider sx={{p:0.5, borderBottomWidth: 2}}></Divider>
+          <div style={{display:"flex", flexDirection:"row", paddingTop:"15px", alignItems:"center", gap:"15px"}}>
+            <Avatar alt="" src={`${randomUserData?.picture?.large}`} sx={{width:"90px", height:"90px"}}/>
+            <div>
+              <h3>Anfitrión:</h3>
+              <h3 style={{fontWeight:"200"}}>{randomUserData?.name?.first + " " + randomUserData?.name?.last}</h3>
+            </div>
+          </div>
         </div>
 
         <div style={{

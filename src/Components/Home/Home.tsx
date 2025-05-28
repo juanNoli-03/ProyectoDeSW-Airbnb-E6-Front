@@ -1,13 +1,13 @@
-import React from 'react';
 import { useEffect, useState } from 'react';
 import axios from "axios";
-import { Box, Container, Divider } from '@mui/material';
+import { Box, Container, Divider, Typography } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useNavigate } from 'react-router-dom';
 import { AccommodationFilters } from '../../model/AccommodationFilters';
 import AccomodationService from '../../service/AccomodationService';
 import { Accommodation } from '../../model/Accomodation';
+import PersonIcon from "@mui/icons-material/Person";
 
 interface Props{
   filters: AccommodationFilters
@@ -82,20 +82,22 @@ export default function Home({filters}: Props) {
               />
               <h5>{accommodation.title}</h5>
               <Divider sx={{backgroundColor:"#ff5a5f"}}></Divider>
-              <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
-                <Box sx={{display:"flex", alignSelf:"start"}}>
-                  <p style={{fontSize:"13px", color:"grey"}}><b>${accommodation.pricePerNight}</b> USD por noche</p>
-                </Box>
-                 <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", gap:"5px"}}>
-                    <Box sx={{display:"flex", alignItems:"center", flexDirection:"row", gap:"2px", alignSelf:"start"}}>
-                      <StarIcon sx={{fontSize:"15px", color:"gold"}}></StarIcon>
-                      <p style={{fontSize:"13px", color:"grey"}}>5</p>
+                <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
+                  <Box sx={{display:"flex", alignSelf:"start"}}>
+                    <p style={{fontSize:"15px", color:"grey"}}><b>${accommodation.pricePerNight}</b> USD por noche</p>
+                  </Box>
+                  <Box sx={{display:"flex", alignItems:"center", gap:"5px"}}>
+                    <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", gap:"2px"}}>
+                      <PersonIcon sx={{color:"grey", fontSize:"20px", cursor:"pointer", "&:hover":{color:"red"}}}/>
+                      <p style={{fontSize:"15px", color:"grey", fontWeight:"bold"}}>{accommodation.numberOfGuests}</p>
                     </Box>
-                    <FavoriteBorderIcon sx={{color:"grey", fontSize:"20px", cursor:"pointer", "&:hover":{color:"red"}}}>
-                    </FavoriteBorderIcon>
+                    <Box sx={{display:"flex", alignItems:"center", flexDirection:"row", gap:"2px"}}>
+                      <StarIcon sx={{fontSize:"20px", color:"gold"}}></StarIcon>
+                      <p style={{fontSize:"15px", color:"grey", fontWeight:"bold"}}>5</p>
+                    </Box>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
           ))}          
         </Box>
       </Container>
@@ -117,19 +119,21 @@ export default function Home({filters}: Props) {
               <h5>{accommodation.title}</h5>
               <Divider sx={{backgroundColor:"#ff5a5f"}}></Divider>
               <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
-                <Box>
-                  <p style={{fontSize:"13px", color:"grey"}}><b>${accommodation.pricePerNight}</b> USD por noche</p>
-                </Box>
-                  <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", gap:"5px"}}>
-                    <Box sx={{display:"flex", alignItems:"center", flexDirection:"row", gap:"2px", alignSelf:"start"}}>
-                      <StarIcon sx={{fontSize:"15px", color:"gold"}}></StarIcon>
-                      <p style={{fontSize:"13px", color:"grey"}}>5</p>
+                  <Box sx={{display:"flex", alignSelf:"start"}}>
+                    <p style={{fontSize:"15px", color:"grey"}}><b>${accommodation.pricePerNight}</b> USD por noche</p>
+                  </Box>
+                  <Box sx={{display:"flex", alignItems:"center", gap:"5px"}}>
+                    <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", gap:"2px"}}>
+                      <PersonIcon sx={{color:"grey", fontSize:"20px", cursor:"pointer", "&:hover":{color:"red"}}}/>
+                      <p style={{fontSize:"15px", color:"grey", fontWeight:"bold"}}>{accommodation.numberOfGuests}</p>
                     </Box>
-                    <FavoriteBorderIcon sx={{color:"grey", fontSize:"20px", "&:hover":{color:"red"}, cursor:"pointer"}}>
-                    </FavoriteBorderIcon>
+                    <Box sx={{display:"flex", alignItems:"center", flexDirection:"row", gap:"2px"}}>
+                      <StarIcon sx={{fontSize:"20px", color:"gold"}}></StarIcon>
+                      <p style={{fontSize:"15px", color:"grey", fontWeight:"bold"}}>5</p>
+                    </Box>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
           ))}          
         </Box>
       </Container>
@@ -150,20 +154,22 @@ export default function Home({filters}: Props) {
               />
               <h5>{accommodation.title}</h5>
               <Divider sx={{backgroundColor:"#ff5a5f"}}></Divider>
-              <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
-                <Box>
-                  <p style={{fontSize:"13px", color:"grey"}}><b>${accommodation.pricePerNight}</b> USD por noche</p>
-                </Box>
-                  <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", gap:"5px"}}>
-                    <Box sx={{display:"flex", alignItems:"center", flexDirection:"row", gap:"2px", alignSelf:"start"}}>
-                      <StarIcon sx={{fontSize:"15px", color:"gold"}}></StarIcon>
-                      <p style={{fontSize:"13px", color:"grey"}}>5</p>
-                    </Box>
-                    <FavoriteBorderIcon sx={{color:"grey", fontSize:"20px", "&:hover":{color:"red"}, cursor:"pointer"}}>
-                    </FavoriteBorderIcon>
+             <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
+                  <Box sx={{display:"flex", alignSelf:"start"}}>
+                    <p style={{fontSize:"15px", color:"grey"}}><b>${accommodation.pricePerNight}</b> USD por noche</p>
                   </Box>
+                  <Box sx={{display:"flex", alignItems:"center", gap:"5px"}}>
+                    <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", gap:"2px"}}>
+                      <PersonIcon sx={{color:"grey", fontSize:"20px", cursor:"pointer", "&:hover":{color:"red"}}}/>
+                      <p style={{fontSize:"15px", color:"grey", fontWeight:"bold"}}>{accommodation.numberOfGuests}</p>
+                    </Box>
+                    <Box sx={{display:"flex", alignItems:"center", flexDirection:"row", gap:"2px"}}>
+                      <StarIcon sx={{fontSize:"20px", color:"gold"}}></StarIcon>
+                      <p style={{fontSize:"15px", color:"grey", fontWeight:"bold"}}>5</p>
+                    </Box>
+                  </Box>
+                </Box>
               </Box>
-            </Box>
           ))}          
         </Box>
       </Container>
