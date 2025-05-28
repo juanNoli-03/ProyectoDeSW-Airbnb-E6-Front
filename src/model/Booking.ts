@@ -12,7 +12,7 @@ export class Booking {
     numberOfNights: number;
     finalAmount: number;
     paymentMethod: PaymentMethod;
-    rating: number;
+    rated:boolean;
     accommodation: {
         idAccommodation: number;
     };

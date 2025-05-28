@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
 import UserService from '../../service/UserService';
-import axios from "axios";
+import BookingService from '../../service/BookingService';
 
 export default function Profile() {
   const [hoverSobreMi, setHoverSobreMi] = useState(false);
@@ -11,7 +11,13 @@ export default function Profile() {
   const navigate = useNavigate();
   const [opcion, setOpcion] = useState("Sobre mí");
 
-  const [lstBookings, setLstBookings] = useState([]);
+  const [lstBookings, setLstBookings] = useState({
+    all: [],
+    past: [],
+    current: [],
+    future: [],
+  });
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
@@ -31,17 +37,77 @@ export default function Profile() {
     };
 
     const fetchBookingHistory = async (userId) => {
-      try {
-        const response = await axios.get(`http://localhost:8080/user/bookings/${userId}`);
-        setLstBookings(response.data);
-      } catch (err) {
+         BookingService.getAllBookingsByUser(userId).then((res) =>{
+          setLstBookings(prev => ({
+            ...prev,
+            all: res.data
+          }));
+         }).catch ( (err) =>{
         console.error("Error al obtener reservas:", err);
         setError("Error al cargar las reservas.");
-      }
+      });
+
+        BookingService.getPastBookingsByUser(userId).then((res) =>{
+          setLstBookings(prev => ({
+            ...prev,
+            past: res.data
+          }));
+         }).catch ( (err) =>{
+        console.error("Error al obtener reservas:", err);
+        setError("Error al cargar las reservas.");
+      });
+
+        BookingService.getInProgressBookingsByUser(userId).then((res) =>{
+          setLstBookings(prev => ({
+            ...prev,
+            current: res.data
+          }));
+         }).catch ( (err) =>{
+        console.error("Error al obtener reservas:", err);
+        setError("Error al cargar las reservas.");
+      });
+      
+      BookingService.getFutureBookingsByUser(userId).then((res) =>{
+          setLstBookings(prev => ({
+            ...prev,
+            future: res.data
+          }));
+         }).catch ( (err) =>{
+        console.error("Error al obtener reservas:", err);
+        setError("Error al cargar las reservas.");
+      });
+    
     };
 
     fetchIdUser();
   }, []);
+
+  //Para no cargar tanto el return
+  const renderBookingCard = (booking,  showRateButton) => (
+
+  <div>
+  <img src={`../../../public/assets/${booking.accommodation.imageUrl}/${booking.accommodation.imageUrl}.jpg`} alt="" style={{borderRadius:"15px", width:"250px", 
+                height:"220px", cursor:"pointer"}} //onClick={()=> handleAccommodationDetail(accommodation.idAccommodation)} 
+              />
+    <p><strong>Propiedad:</strong> {booking.accommodation.title}</p>
+    <p><strong>Fecha de inicio:</strong> {new Date(booking.startDate).toLocaleString()}</p>
+    <p><strong>Fecha de fin:</strong> {new Date(booking.endDate).toLocaleString()}</p>
+    <p><strong>Número de huéspedes:</strong> {booking.numberOfGuests}</p>
+    <p><strong>Noches:</strong> {booking.numberOfNights}</p>
+    <p><strong>Monto final:</strong> ${booking.finalAmount}</p>
+    <p><strong>Método de pago:</strong> {booking.paymentMethod}</p>
+    <p><strong>Rating:</strong> {booking.accommodation.rating} ⭐</p>
+    
+    {showRateButton && !booking.rated && (
+      <button >
+        Calificar
+      </button>
+    )}
+  </div>
+);
+
+
+
 
   if (loading) return <p>Cargando...</p>;
   if (error) return <p>{error}</p>;
@@ -80,12 +146,12 @@ export default function Profile() {
 
         <div>
           <button
-            onClick={() => setOpcion("Viajes anteriores")}
+            onClick={() => setOpcion("Historial de reservas")}
             onMouseEnter={() => setHoverViajes(true)}
             onMouseLeave={() => setHoverViajes(false)}
             style={buttonStyle(hoverViajes)}
           >
-            Mis viajes anteriores
+            Historial de reservas
           </button>
         </div>
       </div>
@@ -140,35 +206,67 @@ export default function Profile() {
       )}
 
       {/* Panel de historial de reservas */}
-      {opcion === "Viajes anteriores" && (
+      {opcion === "Historial de reservas" && (
         <div style={{ position: "absolute", zIndex: 0, top: 145, left: 650 }}>
-          <h2>Viajes anteriores</h2>
+          <h2>Historial de reservas </h2>
 
           {loading && <p>Cargando reservas...</p>}
           {error && <p style={{ color: 'red' }}>{error}</p>}
 
-          {!loading && !error && lstBookings.length === 0 && (
+          {!loading && !error && lstBookings.all.length === 0 && (
             <p>No tienes reservas aún.</p>
           )}
 
-          {!loading && !error && lstBookings.length > 0 && (
-            lstBookings.map((booking) => (
-              <div key={booking.id} style={{
-                boxShadow:"0px 4px 10px rgba(0, 0, 0, 0.25)",
-                padding: "1rem",
-                marginBottom: "1rem",
-                borderRadius: "8px"
-              }}>
-                <p><strong>Propiedad:</strong> {booking.accommodation.title}</p>
-                <p><strong>Fecha de inicio:</strong> {new Date(booking.startDate).toLocaleString()}</p>
-                <p><strong>Fecha de fin:</strong> {new Date(booking.endDate).toLocaleString()}</p>
-                <p><strong>Número de huéspedes:</strong> {booking.numberOfGuests}</p>
-                <p><strong>Noches:</strong> {booking.numberOfNights}</p>
-                <p><strong>Monto final:</strong> ${booking.finalAmount}</p>
-                <p><strong>Método de pago:</strong> {booking.paymentMethod}</p>
-                <p><strong>Rating:</strong> {booking.rating} ⭐</p>
-              </div>
-            ))
+          {!loading && !error && lstBookings.all.length > 0 && (      
+              <div>
+                    <h3>Reservas Pasadas</h3>
+                    {lstBookings.past.length > 0 ? (
+                      lstBookings.past.map((booking) => (
+                        <div key={booking.id} style={{
+                            boxShadow:"0px 4px 10px rgba(0, 0, 0, 0.25)",
+                            padding: "1rem",
+                            marginBottom: "1rem",
+                            borderRadius: "8px"
+                          }}>
+                          {renderBookingCard(booking,true)}
+                        </div>
+                      ))
+                    ) : (
+                      <p>No tienes reservas pasadas.</p>
+                    )}
+
+                    <h3>Reservas en Curso</h3>
+                    {lstBookings.current.length > 0 ? (
+                      lstBookings.current.map((booking) => (
+                        <div key={booking.id} style={{
+                            boxShadow:"0px 4px 10px rgba(0, 0, 0, 0.25)",
+                            padding: "1rem",
+                            marginBottom: "1rem",
+                            borderRadius: "8px"
+                          }}>
+                          {renderBookingCard(booking,false)}
+                        </div>
+                      ))
+                    ) : (
+                      <p>No tienes reservas en curso.</p>
+                    )}
+
+                    <h3>Reservas Futuras</h3>
+                    {lstBookings.future.length > 0 ? (
+                      lstBookings.future.map((booking) => (
+                        <div key={booking.id} style={{
+                            boxShadow:"0px 4px 10px rgba(0, 0, 0, 0.25)",
+                            padding: "1rem",
+                            marginBottom: "1rem",
+                            borderRadius: "8px"
+                          }}>
+                          {renderBookingCard(booking,false)}
+                        </div>
+                      ))
+                    ) : (
+                      <p>No tienes reservas futuras.</p>
+                    )}
+               </div>   
           )}
         </div>
       )}

@@ -82,7 +82,7 @@ const AccommodationDetail = () => {
       numberOfNights: nights,
       finalAmount: (nights * accommodation.pricePerNight),
       paymentMethod,
-      rating: 0,
+      rated: false,
       accommodation: { idAccommodation: Number(accommodationId) },
       user: { idUser: userData.idUser },
     };
