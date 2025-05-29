@@ -5,6 +5,7 @@ import Avatar from '@mui/material/Avatar';
 import UserService from '../../service/UserService';
 import BookingService from '../../service/BookingService';
 import BookingDetail from '../../Components/UI/Modals/BookingDetail';
+import RatingView from '../RatingView/RatingView';
 
 
 export default function Profile() {
@@ -105,7 +106,7 @@ export default function Profile() {
     navigate(`/accommodationDetails/${id}`);
   }
 
-  //
+  //Abrir detalle de la reserva
   const [bookingDetail, setBookingDetail] = useState(false);
   const closeBookingDetail = () => {
     setBookingDetail(false);
@@ -113,7 +114,20 @@ export default function Profile() {
   const openBookingDetail = (booking) => {
     setBooking(booking);
     setBookingDetail(true);
+  }
+
+
+  //Abrir modal para calificar
+
+  const [ratingView, setRatingView ] = useState(false);
+
+  const closeRatingView = () => {
+    setRatingView(false);
   };
+  const openRatingView = (booking) => {
+    setBooking(booking);
+    setRatingView(true);
+  }
 
   
   //Para no cargar tanto el return
@@ -130,7 +144,7 @@ export default function Profile() {
       </button>
     {showRateButton && !booking.rated && (
     
-      <button>
+      <button onClick={()=>openRatingView(booking)}>
         Calificar Estadía
       </button>
     )}
@@ -304,6 +318,12 @@ export default function Profile() {
                         closeAlerta={closeBookingDetail}
                         booking={booking}
                         mensajeAlerta="Vas a ver un detalle"
+                      />
+                      <RatingView
+                        mostrarAlerta={ratingView}
+                        closeAlerta={closeRatingView}
+                        booking={booking}
+
                       />
           </div> 
           )}

@@ -6,6 +6,10 @@ class BookingService {
         return axios.post(`${Constants.BASE_URL}/booking`, payload);
     }
 
+    updateBookingRating(booking, value: number ){
+        return console.log(value);  //axios.post(`${Constants.BASE_URL}/booking`, payload);
+    }
+
     getAllBookingsByUser(idUser :string){
         return axios.get(`http://localhost:8080/user/bookings/${idUser}`);
     }
