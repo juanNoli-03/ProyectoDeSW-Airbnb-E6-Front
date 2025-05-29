@@ -164,115 +164,116 @@ export const Header = ({ setFilters }: Props) => {
         </Box>
       </Link>
 
-
-      <Box sx={{
-        display: "flex", flexDirection: "row", alignItems: "center", backgroundColor: "white", boxShadow: "0 0 10px 0 grey",
-        borderRadius: "45px", p: 1, pl: 2, pr: 2, gap: "10px"
-      }}>
-        <Box>
-          <FormControl sx={selectStyle}>
-            <InputLabel id="continente-label" sx={selectStyle}>Continente</InputLabel>
-            <Select
-              labelId="continente-label"
-              id="continente-select-autowidth"
-              value={continente}
-              onChange={handleChangeContinente}
-              autoWidth
-              label="Continente"
-              size="medium"
-              sx={selectStyle}
-            >
-              <MenuItem value={undefined}>No Aplica</MenuItem>
-              <MenuItem value={"Sudamerica"}>Sudamerica</MenuItem>
-              <MenuItem value={"Europa"}>Europa</MenuItem>
-              <MenuItem value={"Asia"}>Asia</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-        <Divider orientation="vertical" flexItem />
-        <Box>
-          <FormControl sx={selectStyle}>
-            <InputLabel id="pais-label" sx={selectStyle}>País</InputLabel>
-            <Select
-              labelId="pais-label"
-              id="pais-select-autowidth"
-              value={pais}
-              onChange={handleChangePais}
-              autoWidth
-              label="Pais"
-              size="medium"
-              sx={selectStyle}
-            >
-              <MenuItem value={undefined}>No Aplica</MenuItem>
-              <MenuItem value={"Argentina"}>Argentina</MenuItem>
-              <MenuItem value={"Brasil"}>Brasil</MenuItem>
-              <MenuItem value={"Colombia"}>Colombia</MenuItem>
-              <MenuItem value={"España"}>España</MenuItem>
-              <MenuItem value={"Francia"}>Francia</MenuItem>
-              <MenuItem value={"Italia"}>Italia</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-        <Divider orientation="vertical" flexItem />
-        <Box sx={{ width: 200, ml: 2, mr: 2, display: "flex", flexDirection: "row", alignItems: "center", gap: "3px" }}>
-          <Slider
-            aria-label="Precio por noche"
-            value={precio}
-            onChange={(event, newValue) => setPrecio(newValue)}
-            valueLabelDisplay="auto"
-            shiftStep={30}
-            step={10}
-            marks
-            min={10}
-            max={110}
-            sx={sliderStyle}
-          />
-          <Divider orientation="vertical" flexItem />
-          <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-            <AttachMoneyIcon></AttachMoneyIcon>
-            <Typography sx={{ fontWeight: "bold" }}>{precio}</Typography>
+      {!(location.pathname.startsWith("/profile") || location.pathname.startsWith("/accommodationDetails")) && (
+        <Box sx={{
+          display: "flex", flexDirection: "row", alignItems: "center", backgroundColor: "white", boxShadow: "0 0 10px 0 grey",
+          borderRadius: "45px", p: 1, pl: 2, pr: 2, gap: "10px"
+        }}>
+          <Box>
+            <FormControl sx={selectStyle}>
+              <InputLabel id="continente-label" sx={selectStyle}>Continente</InputLabel>
+              <Select
+                labelId="continente-label"
+                id="continente-select-autowidth"
+                value={continente}
+                onChange={handleChangeContinente}
+                autoWidth
+                label="Continente"
+                size="medium"
+                sx={selectStyle}
+              >
+                <MenuItem value={undefined}>No Aplica</MenuItem>
+                <MenuItem value={"Sudamerica"}>Sudamerica</MenuItem>
+                <MenuItem value={"Europa"}>Europa</MenuItem>
+                <MenuItem value={"Asia"}>Asia</MenuItem>
+              </Select>
+            </FormControl>
           </Box>
-        </Box>
-        <Divider orientation="vertical" flexItem />
-        <Box>
-          <FormControl sx={selectStyle}>
-            <InputLabel id="order-label" sx={selectStyle}>Orden</InputLabel>
-            <Select
-              labelId="order-label"
-              id="order-select"
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
-              label="Orden"
-              sx={selectStyle}
-            >
-              <MenuItem value="asc">Precio (Menor a Mayor)</MenuItem>
-              <MenuItem value="desc">Precio (Mayor a Menor)</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-        <Box>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={includeAll}
-                onChange={(e) => setIncludeAll(e.target.checked)}
-                sx={{
-                  color: '#ff5a5f',
-                  '&.Mui-checked': {
+          <Divider orientation="vertical" flexItem />
+          <Box>
+            <FormControl sx={selectStyle}>
+              <InputLabel id="pais-label" sx={selectStyle}>País</InputLabel>
+              <Select
+                labelId="pais-label"
+                id="pais-select-autowidth"
+                value={pais}
+                onChange={handleChangePais}
+                autoWidth
+                label="Pais"
+                size="medium"
+                sx={selectStyle}
+              >
+                <MenuItem value={undefined}>No Aplica</MenuItem>
+                <MenuItem value={"Argentina"}>Argentina</MenuItem>
+                <MenuItem value={"Brasil"}>Brasil</MenuItem>
+                <MenuItem value={"Colombia"}>Colombia</MenuItem>
+                <MenuItem value={"España"}>España</MenuItem>
+                <MenuItem value={"Francia"}>Francia</MenuItem>
+                <MenuItem value={"Italia"}>Italia</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+          <Divider orientation="vertical" flexItem />
+          <Box sx={{ width: 200, ml: 2, mr: 2, display: "flex", flexDirection: "row", alignItems: "center", gap: "3px" }}>
+            <Slider
+              aria-label="Precio por noche"
+              value={precio}
+              onChange={(event, newValue) => setPrecio(newValue)}
+              valueLabelDisplay="auto"
+              shiftStep={30}
+              step={10}
+              marks
+              min={10}
+              max={110}
+              sx={sliderStyle}
+            />
+            <Divider orientation="vertical" flexItem />
+            <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+              <AttachMoneyIcon></AttachMoneyIcon>
+              <Typography sx={{ fontWeight: "bold" }}>{precio}</Typography>
+            </Box>
+          </Box>
+          <Divider orientation="vertical" flexItem />
+          <Box>
+            <FormControl sx={selectStyle}>
+              <InputLabel id="order-label" sx={selectStyle}>Orden</InputLabel>
+              <Select
+                labelId="order-label"
+                id="order-select"
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+                label="Orden"
+                sx={selectStyle}
+              >
+                <MenuItem value="asc">Precio (Menor a Mayor)</MenuItem>
+                <MenuItem value="desc">Precio (Mayor a Menor)</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+          <Box>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={includeAll}
+                  onChange={(e) => setIncludeAll(e.target.checked)}
+                  sx={{
                     color: '#ff5a5f',
-                  },
-                }}
-              />
-            }
-            label="Incluir no disponibles"
-            sx={{ ml: 1 }}
-          />
-        </Box>
-        <Divider orientation="vertical" flexItem />
-        <Box>
-          <SearchIcon onClick={executeFilters} fontSize="large" sx={{ color: "white", backgroundColor: "#ff5a5f", padding: "8px", borderRadius: "20px", cursor: "pointer" }}></SearchIcon>
-        </Box>
-      </Box>
+                    '&.Mui-checked': {
+                      color: '#ff5a5f',
+                    },
+                  }}
+                />
+              }
+              label="Incluir no disponibles"
+              sx={{ ml: 1 }}
+            />
+          </Box>
+          <Divider orientation="vertical" flexItem />
+          <Box>
+            <SearchIcon onClick={executeFilters} fontSize="large" sx={{ color: "white", backgroundColor: "#ff5a5f", padding: "8px", borderRadius: "20px", cursor: "pointer" }}></SearchIcon>
+          </Box>
+        </Box>)}
+
 
 
       {isLoading && (

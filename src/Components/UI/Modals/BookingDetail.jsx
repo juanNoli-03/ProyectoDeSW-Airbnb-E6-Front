@@ -5,7 +5,7 @@ import {Typography, Box, Button} from '@mui/material';
 import PropTypes from "prop-types";
 import { Dialog } from '@mui/material';
 
-function BookingDetail({mostrarAlerta, closeAlerta, mensajeAlerta,booking}) {
+function BookingDetail({mostrarAlerta, closeAlerta, booking}) {
 
   return (
     <Dialog

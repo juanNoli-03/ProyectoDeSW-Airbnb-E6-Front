@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from "axios";
 import { Box, Container, Divider } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import { useNavigate } from 'react-router-dom';
