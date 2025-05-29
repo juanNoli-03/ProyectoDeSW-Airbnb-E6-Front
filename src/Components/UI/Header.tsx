@@ -1,4 +1,5 @@
-import { Box, IconButton, Typography } from "@mui/material";
+import React from "react";
+import { Box, Checkbox, FormControlLabel, IconButton, Typography } from "@mui/material";
 import Logout from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
@@ -20,7 +21,7 @@ import Slider from '@mui/material/Slider';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { AccommodationFilters } from "../../model/AccommodationFilters";
 
-interface Props{
+interface Props {
   setFilters: (filtersValue: AccommodationFilters) => void;
 }
 
@@ -38,8 +39,9 @@ export const Header = ({ setFilters }: Props) => {
       continent: continente ?? null,
       country: pais ?? null,
       city: null,
-      available: true,
-      sortByPriceDesc: false,
+      pricePerNight: precio ?? null,
+      available: includeAll ? false : true,
+      sortByPriceDesc: sortOrder === "desc",
     }
 
     setFilters(filters);
@@ -54,29 +56,27 @@ export const Header = ({ setFilters }: Props) => {
     setAnchorEl(null);
   };
 
- const handleNavigateLogin = () => {
+  const handleNavigateLogin = () => {
     navigate("/login");
   };
 
-   const handleNavigateProfile= () => {
+  const handleNavigateProfile = () => {
     navigate("/profile");
   };
 
-  const handleNavigateHome= () => {
+  const handleNavigateHome = () => {
     navigate("/home");
   };
 
-  const [continente, setContinente] = useState('');
+  const [continente, setContinente] = useState(null);
 
   const handleChangeContinente = (event) => {
-    console.log("continent -> ", event.target.value)
     setContinente(event.target.value);
   };
 
-  const [pais, setPais] = useState('');
+  const [pais, setPais] = useState(null);
 
   const handleChangePais = (event) => {
-    console.log("pais -> ", event.target.value)
     setPais(event.target.value);
   };
 
@@ -96,9 +96,9 @@ export const Header = ({ setFilters }: Props) => {
   };
 
   const selectStyle = {
-     '& .MuiInputLabel-root': {
+    '& .MuiInputLabel-root': {
       color: '#ff5a5f',
-      fontWeight:"bold"
+      fontWeight: "bold"
     },
     '& .MuiInputLabel-root.Mui-focused': {
       color: '#ff5a5f',
@@ -115,16 +115,16 @@ export const Header = ({ setFilters }: Props) => {
     '& .MuiSvgIcon-root': {
       color: '#ff5a5f',
     },
-     '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
       borderColor: '#ff5a5f',
     },
-     m: 0.5, 
-     minWidth: 150,
-     borderRadius:"25px"
+    m: 0.5,
+    minWidth: 150,
+    borderRadius: "25px"
   }
 
   const sliderStyle = {
-     color: '#ff5a5f',
+    color: '#ff5a5f',
     '& .MuiSlider-thumb': {
       backgroundColor: '#ff5a5f',
     },
@@ -134,6 +134,11 @@ export const Header = ({ setFilters }: Props) => {
     }
   }
 
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [includeAll, setIncludeAll] = useState(false);
+
+
+
   return (
     <Box
       sx={{
@@ -142,72 +147,74 @@ export const Header = ({ setFilters }: Props) => {
         flexDirection: "row",
         justifyContent: "space-between",
         borderBottom: "solid 3px #ff5a5f",
-        pt:2,
-        pb:2,
-        pl:3,
-        pr:3
+        pt: 2,
+        pb: 2,
+        pl: 3,
+        pr: 3
       }}
     >
       <Link to="/">
-      <Box>
-        <img
-          src="../../../public/assets/bannerAirbnb.png"
-          alt=""
-          onClick={handleNavigateHome}
-          style={{ height: "35px", width: "110px", cursor: "pointer" }}
-        />
-      </Box>
+        <Box>
+          <img
+            src="../../../public/assets/bannerAirbnb.png"
+            alt=""
+            onClick={handleNavigateHome}
+            style={{ height: "35px", width: "110px", cursor: "pointer" }}
+          />
+        </Box>
       </Link>
 
 
-      <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", backgroundColor:"white", boxShadow:"0 0 10px 0 grey", 
-        borderRadius:"45px", p:1, pl:2, pr:2, gap:"10px"}}>
+      <Box sx={{
+        display: "flex", flexDirection: "row", alignItems: "center", backgroundColor: "white", boxShadow: "0 0 10px 0 grey",
+        borderRadius: "45px", p: 1, pl: 2, pr: 2, gap: "10px"
+      }}>
         <Box>
-           <FormControl sx={selectStyle}>
-                <InputLabel id="continente-label" sx={selectStyle}>Continente</InputLabel>
-                <Select
-                  labelId="continente-label"
-                  id="continente-select-autowidth"
-                  value={continente}
-                  onChange={handleChangeContinente}
-                  autoWidth
-                  label="Continente"
-                  size="medium"
-                  sx={selectStyle}
-                >
-                <MenuItem value={"No aplica"}>No aplica</MenuItem>
-                <MenuItem value={"Sudamerica"}>Sudamerica</MenuItem>
-                <MenuItem value={"Europa"}>Europa</MenuItem>
-                <MenuItem value={"Asia"}>Asia</MenuItem>
-              </Select>
-            </FormControl>
-        </Box>
-          <Divider orientation="vertical" flexItem />
-        <Box>
-           <FormControl sx={selectStyle}>
-              <InputLabel id="pais-label" sx={selectStyle}>País</InputLabel>
-                <Select
-                  labelId="pais-label"
-                  id="pais-select-autowidth"
-                  value={pais}
-                  onChange={handleChangePais}
-                  autoWidth
-                  label="Pais"
-                  size="medium"
-                  sx={selectStyle}
-                >
-                <MenuItem value={"No aplica"}>No aplica</MenuItem>
-                <MenuItem value={"Argentina"}>Argentina</MenuItem>
-                <MenuItem value={"Brasil"}>Brasil</MenuItem>
-                <MenuItem value={"Colombia"}>Colombia</MenuItem>
-                <MenuItem value={"España"}>España</MenuItem>
-                <MenuItem value={"Francia"}>Francia</MenuItem>
-                <MenuItem value={"Italia"}>Italia</MenuItem>
-              </Select>
-            </FormControl>
+          <FormControl sx={selectStyle}>
+            <InputLabel id="continente-label" sx={selectStyle}>Continente</InputLabel>
+            <Select
+              labelId="continente-label"
+              id="continente-select-autowidth"
+              value={continente}
+              onChange={handleChangeContinente}
+              autoWidth
+              label="Continente"
+              size="medium"
+              sx={selectStyle}
+            >
+              <MenuItem value={undefined}>No Aplica</MenuItem>
+              <MenuItem value={"Sudamerica"}>Sudamerica</MenuItem>
+              <MenuItem value={"Europa"}>Europa</MenuItem>
+              <MenuItem value={"Asia"}>Asia</MenuItem>
+            </Select>
+          </FormControl>
         </Box>
         <Divider orientation="vertical" flexItem />
-        <Box sx={{width: 200, ml:2, mr:2, display:"flex", flexDirection:"row", alignItems:"center", gap:"3px"}}>
+        <Box>
+          <FormControl sx={selectStyle}>
+            <InputLabel id="pais-label" sx={selectStyle}>País</InputLabel>
+            <Select
+              labelId="pais-label"
+              id="pais-select-autowidth"
+              value={pais}
+              onChange={handleChangePais}
+              autoWidth
+              label="Pais"
+              size="medium"
+              sx={selectStyle}
+            >
+              <MenuItem value={undefined}>No Aplica</MenuItem>
+              <MenuItem value={"Argentina"}>Argentina</MenuItem>
+              <MenuItem value={"Brasil"}>Brasil</MenuItem>
+              <MenuItem value={"Colombia"}>Colombia</MenuItem>
+              <MenuItem value={"España"}>España</MenuItem>
+              <MenuItem value={"Francia"}>Francia</MenuItem>
+              <MenuItem value={"Italia"}>Italia</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        <Divider orientation="vertical" flexItem />
+        <Box sx={{ width: 200, ml: 2, mr: 2, display: "flex", flexDirection: "row", alignItems: "center", gap: "3px" }}>
           <Slider
             aria-label="Precio por noche"
             value={precio}
@@ -220,14 +227,50 @@ export const Header = ({ setFilters }: Props) => {
             max={110}
             sx={sliderStyle}
           />
-          <Box sx={{display:"flex", flexDirection:"row", alignItems:"center"}}>
+          <Divider orientation="vertical" flexItem />
+          <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
             <AttachMoneyIcon></AttachMoneyIcon>
-            <Typography sx={{fontWeight:"bold"}}>{precio}</Typography>
+            <Typography sx={{ fontWeight: "bold" }}>{precio}</Typography>
           </Box>
         </Box>
-          <Divider orientation="vertical" flexItem />
+        <Divider orientation="vertical" flexItem />
         <Box>
-          <SearchIcon onClick={executeFilters} fontSize="large" sx={{color:"white", backgroundColor:"#ff5a5f", padding:"8px", borderRadius:"20px", cursor:"pointer"}}></SearchIcon>
+          <FormControl sx={selectStyle}>
+            <InputLabel id="order-label" sx={selectStyle}>Orden</InputLabel>
+            <Select
+              labelId="order-label"
+              id="order-select"
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+              label="Orden"
+              sx={selectStyle}
+            >
+              <MenuItem value="asc">Precio (Menor a Mayor)</MenuItem>
+              <MenuItem value="desc">Precio (Mayor a Menor)</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        <Box>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={includeAll}
+                onChange={(e) => setIncludeAll(e.target.checked)}
+                sx={{
+                  color: '#ff5a5f',
+                  '&.Mui-checked': {
+                    color: '#ff5a5f',
+                  },
+                }}
+              />
+            }
+            label="Incluir no disponibles"
+            sx={{ ml: 1 }}
+          />
+        </Box>
+        <Divider orientation="vertical" flexItem />
+        <Box>
+          <SearchIcon onClick={executeFilters} fontSize="large" sx={{ color: "white", backgroundColor: "#ff5a5f", padding: "8px", borderRadius: "20px", cursor: "pointer" }}></SearchIcon>
         </Box>
       </Box>
 
@@ -255,9 +298,9 @@ export const Header = ({ setFilters }: Props) => {
         >
           {sesionActiva ? (
             <Avatar
-            sx={{backgroundColor:"black"}}
-            alt="Remy Sharp"
-            src="/broken-image.jpg"
+              sx={{ backgroundColor: "black" }}
+              alt="Remy Sharp"
+              src="/broken-image.jpg"
             >
               {localStorage.getItem("firstName")?.charAt(0)}
             </Avatar>
@@ -290,7 +333,7 @@ export const Header = ({ setFilters }: Props) => {
                     fontSize="medium"
                     sx={{ color: "black" }}
                     onClick={handleLogout}
-                  /> 
+                  />
                 </ListItemIcon>
                 Cerrar Sesión
               </MenuItem>

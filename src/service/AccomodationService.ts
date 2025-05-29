@@ -4,31 +4,31 @@ import { AccommodationFilters } from "../model/AccommodationFilters";
 import { Accommodation } from "../model/Accomodation";
 
 class AccommodationService {
-    getAccommodation(id: string){
+    getAccommodation(id: string) {
         return axios.get(`${Constants.BASE_URL}/accommodations/${id}`);
     }
-    getAccommodations(){
+    getAccommodations() {
         return axios.get(`${Constants.BASE_URL}/accommodations`);
     }
 
-    getAccommodationsByCity(city: String){
+    getAccommodationsByCity(city: String) {
         return axios.get(`${Constants.BASE_URL}/accommodationsByCity/${city}`);
     }
 
-    getAccommodationsByContinent(continent: String){
+    getAccommodationsByContinent(continent: String) {
         return axios.get(`${Constants.BASE_URL}/accommodationsByContinent/${continent}`);
     }
 
-    getAccommodationsByAvailable(){
+    getAccommodationsByAvailable() {
         return axios.get(`${Constants.BASE_URL}/accommodationsByAvailableTrue`);
     }
 
-    filterAccommodations(filters: AccommodationFilters){
+    filterAccommodations(filters: AccommodationFilters) {
         return axios.get<Accommodation[]>(`${Constants.BASE_URL}/filterAccommodations`, {
             params: filters
         });
     }
-    
+
 }
 
 export default new AccommodationService();

@@ -4,6 +4,7 @@ export class Accommodation {
     description: string;
     country: string;
     city: string;
+    continent: string;
     address: string;
     pricePerNight: number;
     available: boolean;
@@ -16,4 +17,10 @@ export class AccommodationDetail {
     rooms: number;
     beds: number;
     bathrooms: number;
+}
+
+export enum Continent {
+    SUDAMERICA = "Sudamerica",
+    EUROPA = "Europa",
+    ASIA = "Asia"
 }
