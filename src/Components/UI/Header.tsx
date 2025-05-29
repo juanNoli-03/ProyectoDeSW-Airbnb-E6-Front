@@ -159,7 +159,7 @@ export const Header = ({ setFilters }: Props) => {
       </Box>
       </Link>
 
-
+      {!(location.pathname.startsWith("/profile") || location.pathname.startsWith("/accommodationDetails")) && (
       <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", backgroundColor:"white", boxShadow:"0 0 10px 0 grey", 
         borderRadius:"45px", p:1, pl:2, pr:2, gap:"10px"}}>
         <Box>
@@ -229,7 +229,8 @@ export const Header = ({ setFilters }: Props) => {
         <Box>
           <SearchIcon onClick={executeFilters} fontSize="large" sx={{color:"white", backgroundColor:"#ff5a5f", padding:"8px", borderRadius:"20px", cursor:"pointer"}}></SearchIcon>
         </Box>
-      </Box>
+      </Box>)}
+      
 
 
       {isLoading && (

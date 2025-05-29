@@ -1,4 +1,3 @@
-import React from 'react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AccomodationService from '../../service/AccomodationService';
@@ -6,9 +5,17 @@ import BookingService from '../../service/BookingService';
 import { Accommodation } from '../../model/Accomodation';
 import { PaymentMethod, Booking } from '../../model/Booking';
 import UserService from '../../service/UserService';
-import { Divider, GridLegacy as Grid } from '@mui/material';
+import { Button, Divider, GridLegacy as Grid } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-
+import { AccomodationsDescriptions } from './AccommodationsDescriptions';
+import WifiIcon from '@mui/icons-material/Wifi';
+import LocalDiningIcon from '@mui/icons-material/LocalDining';
+import LocalLaundryServiceIcon from '@mui/icons-material/LocalLaundryService';
+import AcUnitIcon from '@mui/icons-material/AcUnit';
+import MailIcon from '@mui/icons-material/Mail';
+import ContactModal from '../UI/Modals/ContactModal';
+import LoadingScreen from "../UI/LoadingScreen/LoadingScreen";
+import GenericSnackbar from "../UI/Snackbar/Snackbar";
 
 const AccommodationDetail = () => {
   const { id: accommodationId } = useParams();
@@ -23,6 +30,44 @@ const AccommodationDetail = () => {
   const email = localStorage.getItem("email");
   const [userData, setUserData] = useState<any>();
   const[randomUserData, setRandomUserData] = useState<any>();
+  const esVisitante = localStorage.getItem("sesionActiva");
+  
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingScreen, setLoadingScreen] = useState({
+      message: "",
+      duration: 0,
+    });
+  
+  const [snackbar, setSnackbar] = useState({
+    status: "",
+    message: "",
+  });
+  const [snackbarVisibility, setSnackbarVisibility] = useState(false);
+  
+  const [showContactModal, setContactModal] = useState<Boolean>(false);
+  const openContactModal = () => {
+    setContactModal(true);
+  }
+  const closeContactModal = () => {
+    setContactModal(false);
+  }
+  const enviarMensajeAnfitrión = () => {
+    setLoadingScreen({
+      message: "Contactandote con el anfitrión",
+      duration: 3000,
+    }),
+    setSnackbar({
+      status:"success",
+      message:"Mensaje enviado!"
+    })
+    setIsLoading(true),
+    closeContactModal();
+    setTimeout(() => {
+      setIsLoading(false);
+      setSnackbarVisibility(true);
+    }, 3000)
+    setSnackbarVisibility(false);
+  }
 
   useEffect(() => {
     if (accommodationId) fetchAccommodation();
@@ -47,10 +92,9 @@ const AccommodationDetail = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchRandomUser = async () => {
+  const fetchRandomUser = async (accommodationId) => {
       try {
-        const res = await UserService.getRandomUser();
+        const res = await UserService.getRandomUser(accommodationId);
         console.log(res.data.results[0]);
         setRandomUserData(res.data.results[0]);
       } catch {
@@ -59,7 +103,9 @@ const AccommodationDetail = () => {
         setLoading(false);
       }
     };
-    fetchRandomUser();
+
+  useEffect(() => {
+    fetchRandomUser(accommodationId);
   }, [])
 
   const handleBooking = async () => {
@@ -154,12 +200,43 @@ const AccommodationDetail = () => {
             {accommodation.numberOfGuests} huéspedes - {accommodation.accommodationDetail.rooms} dormitorios - {accommodation.accommodationDetail.beds} camas - {accommodation.accommodationDetail.bathrooms} baños. 
           </h3>
           <Divider sx={{p:0.5, borderBottomWidth: 2}}></Divider>
-          <div style={{display:"flex", flexDirection:"row", paddingTop:"15px", alignItems:"center", gap:"15px"}}>
+          <div style={{display:"flex", flexDirection:"row", paddingTop:"30px", paddingBottom:"30px", alignItems:"center", gap:"20px"}}>
             <Avatar alt="" src={`${randomUserData?.picture?.large}`} sx={{width:"90px", height:"90px"}}/>
             <div>
               <h3>Anfitrión:</h3>
               <h3 style={{fontWeight:"200"}}>{randomUserData?.name?.first + " " + randomUserData?.name?.last}</h3>
             </div>
+            <Button variant='contained' sx={{fontSize:"small", borderRadius:"15px", fontWeight:"bold", backgroundColor:"#ff5a5f"}} endIcon={<MailIcon/>}
+            onClick={openContactModal} disabled={esVisitante == null}>Contactarse </Button>
+          </div>
+          <div style={{paddingBottom:"15px"}}>
+              <h2>Descripción del alojamiento</h2>
+              <Divider sx={{p:0.5, borderBottomWidth: 2}}></Divider>
+              <p style={{textAlign:"justify", lineHeight:"30px"}}>{AccomodationsDescriptions[accommodation.idAccommodation - 1]?.desc}</p>
+          </div>
+           <div style={{display:"flex", flexDirection:"column"}}>
+              <h2>¿Que ofrece este lugar?</h2>
+              <Divider sx={{p:0.5, borderBottomWidth: 2}}></Divider>
+              <div style={{display:"flex", flexDirection:"row", paddingTop:"20px", gap:"150px"}}>
+                <div style={{display:"flex", flexDirection:"column", gap:"20px"}}>
+                  <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
+                    <WifiIcon sx={{fontSize:"30px"}}></WifiIcon> <p style={{fontSize:"20px", fontWeight:"300"}}>Wifi</p>
+                  </div>
+                   <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
+                    <LocalDiningIcon sx={{fontSize:"30px"}}></LocalDiningIcon> <p style={{fontSize:"20px", fontWeight:"300"}}>Cocina</p>
+                  </div>
+                </div>
+                <div style={{display:"flex", flexDirection:"column", gap:"20px"}}>
+                  <div style={{display:"flex", flexDirection:"column", gap:"20px"}}>
+                    <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
+                      <LocalLaundryServiceIcon sx={{fontSize:"30px"}}></LocalLaundryServiceIcon> <p style={{fontSize:"20px", fontWeight:"300"}}>Lavarropas</p>
+                    </div>
+                    <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
+                      <AcUnitIcon sx={{fontSize:"30px"}}></AcUnitIcon> <p style={{fontSize:"20px", fontWeight:"300"}}>Aire acondicionado</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
           </div>
         </div>
 
@@ -169,7 +246,8 @@ const AccommodationDetail = () => {
           border: '1px solid #ddd',
           borderRadius: '12px',
           textAlign: 'center',
-          backgroundColor: '#f9f9f9'
+          backgroundColor: '#f9f9f9',
+          height:"100%"
         }}>
           <p style={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
             ${accommodation.pricePerNight} / noche
@@ -214,6 +292,26 @@ const AccommodationDetail = () => {
           {bookingSuccess && <p style={{ marginTop: '1rem', color: bookingSuccess.includes("éxito") ? 'green' : 'red' }}>{bookingSuccess}</p>}
         </div>
       </div>
+      <ContactModal
+        mostrarContactModal={showContactModal}
+        closeContactModal={closeContactModal}
+        hostName={randomUserData?.name?.first + " " + randomUserData?.name?.last}
+        accommodationName={accommodation.title}
+        accion={enviarMensajeAnfitrión}
+      />
+      {snackbarVisibility && (
+        <GenericSnackbar
+          status={snackbar.status}
+          message={snackbar.message}
+          visibility={snackbarVisibility}
+        />
+      )}
+      {isLoading && (
+        <LoadingScreen
+          message={loadingScreen.message}
+          duration={loadingScreen.duration}
+        />
+      )}
     </div>
   );
 };

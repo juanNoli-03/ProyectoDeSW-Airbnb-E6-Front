@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from "axios";
-import { Box, Container, Divider, Typography } from '@mui/material';
+import { Box, Container, Divider } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useNavigate } from 'react-router-dom';
 import { AccommodationFilters } from '../../model/AccommodationFilters';
 import AccomodationService from '../../service/AccomodationService';
@@ -88,7 +87,7 @@ export default function Home({filters}: Props) {
                   </Box>
                   <Box sx={{display:"flex", alignItems:"center", gap:"5px"}}>
                     <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", gap:"2px"}}>
-                      <PersonIcon sx={{color:"grey", fontSize:"20px", cursor:"pointer", "&:hover":{color:"red"}}}/>
+                      <PersonIcon sx={{color:"grey", fontSize:"20px", cursor:"pointer"}}/>
                       <p style={{fontSize:"15px", color:"grey", fontWeight:"bold"}}>{accommodation.numberOfGuests}</p>
                     </Box>
                     <Box sx={{display:"flex", alignItems:"center", flexDirection:"row", gap:"2px"}}>
@@ -124,7 +123,7 @@ export default function Home({filters}: Props) {
                   </Box>
                   <Box sx={{display:"flex", alignItems:"center", gap:"5px"}}>
                     <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", gap:"2px"}}>
-                      <PersonIcon sx={{color:"grey", fontSize:"20px", cursor:"pointer", "&:hover":{color:"red"}}}/>
+                      <PersonIcon sx={{color:"grey", fontSize:"20px", cursor:"pointer"}}/>
                       <p style={{fontSize:"15px", color:"grey", fontWeight:"bold"}}>{accommodation.numberOfGuests}</p>
                     </Box>
                     <Box sx={{display:"flex", alignItems:"center", flexDirection:"row", gap:"2px"}}>
@@ -160,7 +159,7 @@ export default function Home({filters}: Props) {
                   </Box>
                   <Box sx={{display:"flex", alignItems:"center", gap:"5px"}}>
                     <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", gap:"2px"}}>
-                      <PersonIcon sx={{color:"grey", fontSize:"20px", cursor:"pointer", "&:hover":{color:"red"}}}/>
+                      <PersonIcon sx={{color:"grey", fontSize:"20px", cursor:"pointer"}}/>
                       <p style={{fontSize:"15px", color:"grey", fontWeight:"bold"}}>{accommodation.numberOfGuests}</p>
                     </Box>
                     <Box sx={{display:"flex", alignItems:"center", flexDirection:"row", gap:"2px"}}>
