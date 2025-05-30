@@ -172,7 +172,26 @@ export default function Profile() {
 </div>
 );
 
-
+ //Actualizar luego de calificar
+  const handleRatingSuccess = (idBooking,newRating) => {
+  setLstBookings(prevState => {
+    return {
+      ...prevState,
+      past: prevState.past.map(booking =>
+        booking.idBooking === idBooking
+          ?{
+            ...booking,
+            rated: true,
+            accommodation: {
+              ...booking.accommodation,
+              rating: newRating
+            }
+          }
+          : booking
+      )
+    };
+  });
+};
 
 
   if (loading) return <p>Cargando...</p>;
@@ -341,7 +360,7 @@ export default function Profile() {
                         mostrarAlerta={ratingView}
                         closeAlerta={closeRatingView}
                         booking={booking}
-
+                        onRatingSuccess= {handleRatingSuccess}
                       />
           </div> 
           )}

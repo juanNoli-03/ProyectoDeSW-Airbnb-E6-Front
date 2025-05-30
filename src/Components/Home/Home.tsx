@@ -91,7 +91,7 @@ export default function Home({ filters }: Props) {
                     </Box>
                     <Box sx={{ display: "flex", alignItems: "center", flexDirection: "row", gap: "2px" }}>
                       <StarIcon sx={{ fontSize: "20px", color: "gold" }} />
-                      <p style={{ fontSize: "15px", color: "grey", fontWeight: "bold" }}>5</p>
+                      <p style={{ fontSize: "15px", color: "grey", fontWeight: "bold" }}>{accommodation.rating.toFixed(1)}</p>
                     </Box>
                   </Box>
                 </Box>

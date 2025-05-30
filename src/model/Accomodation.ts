@@ -9,6 +9,7 @@ export class Accommodation {
     pricePerNight: number;
     available: boolean;
     imageUrl: string;
+    rating: number;
     numberOfGuests: number;
     accommodationDetail: AccommodationDetail;
 }

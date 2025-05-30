@@ -8,7 +8,7 @@ import { Dialog } from '@mui/material';
 import BookingService from '../../service/BookingService';
 
 
-function RatingView({mostrarAlerta, closeAlerta, booking}) {
+function RatingView({mostrarAlerta, closeAlerta, booking, onRatingSuccess}) {
 
     const [value, setValue] = useState(0);
     const [ratingSuccess, setRatingSuccess] = useState(null);
@@ -18,9 +18,20 @@ function RatingView({mostrarAlerta, closeAlerta, booking}) {
     const handleRating= async()=>{
         try {
         await   BookingService.updateBookingRating(booking,value);
-                setRatingSuccess("Reserva realizada con éxito 🎉");
+                setRatingSuccess("Calificacion realizada con éxito 🎉");
+                
+                const cantRatings = booking.accommodation.numberOfRating +1 ;
+                const newRating= (booking.accommodation.rating * booking.accommodation.numberOfRating +value) /cantRatings;
+
+
+                onRatingSuccess(booking.idBooking,newRating);
+                
+                setTimeout(() => {
+                    closeAlerta();
+                }, 1500);
+                
         } catch {
-                setRatingSuccess("Error al realizar la reserva.");
+                setRatingSuccess("Error al realizar la Calificacion.");
         }
 
 
@@ -67,6 +78,14 @@ function RatingView({mostrarAlerta, closeAlerta, booking}) {
 
         <button onClick={handleRating}>Enviar</button>
 
+    {/* Mensaje de éxito o error */}
+    {ratingSuccess && (
+      <Typography sx={{ mt: 2, color: ratingSuccess.includes("éxito") ? 'green' : 'red' }}>
+        {ratingSuccess}
+
+      </Typography>
+    )}
+
     </DialogContent>
   </Dialog>
   );
@@ -77,6 +96,7 @@ RatingView.propTypes = {
     mostrarAlerta: PropTypes.bool.isRequired,
     closeAlerta: PropTypes.func.isRequired,
     booking: PropTypes.object.isRequired,
-    };
+    onRatingSuccess: PropTypes.func.isRequired
+};
 
 export default RatingView;

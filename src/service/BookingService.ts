@@ -7,7 +7,8 @@ class BookingService {
     }
 
     updateBookingRating(booking, value: number ){
-        return console.log(value);  //axios.post(`${Constants.BASE_URL}/booking`, payload);
+        return axios.put(`http://localhost:8080/booking/${booking.idBooking}/rate?rating=${value}`);
+
     }
 
     getAllBookingsByUser(idUser :string){

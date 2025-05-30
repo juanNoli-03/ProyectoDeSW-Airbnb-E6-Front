@@ -40,7 +40,12 @@ function BookingDetail({mostrarAlerta, closeAlerta, booking}) {
             <p><strong>Noches:</strong> {booking.numberOfNights}</p>
             <p><strong>Monto final:</strong> ${booking.finalAmount}</p>
             <p><strong>Método de pago:</strong> {booking.paymentMethod}</p>
-            <p><strong>Rating:</strong> {booking.accommodation.rating} ⭐</p>
+            <p>
+                <strong>Rating:</strong>{" "}
+                {typeof booking?.accommodation?.rating === "number"
+                 ? booking.accommodation.rating.toFixed(1)
+                : "Sin calificación"} ⭐
+            </p>
     </DialogContent>
   </Dialog>
   );
