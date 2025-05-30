@@ -1,12 +1,17 @@
 import { useNavigate } from 'react-router-dom';
-import React, { useState, useEffect } from "react";
-import { Button } from "@mui/material";
+import { useState, useEffect } from "react";
+import { Card, Divider, Button } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
 import UserService from '../../service/UserService';
 import BookingService from '../../service/BookingService';
 import BookingDetail from '../../Components/UI/Modals/BookingDetail';
 import RatingView from '../RatingView/RatingView';
-
+import LuggageIcon from '@mui/icons-material/Luggage';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import HistoryIcon from '@mui/icons-material/History';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 
 export default function Profile() {
   const [hoverSobreMi, setHoverSobreMi] = useState(false);
@@ -132,23 +137,39 @@ export default function Profile() {
   
   //Para no cargar tanto el return
   const renderBookingCard = (booking,  showRateButton) => (
+  <div style={{display:"flex", flexDirection:"row", width:"100%", alignItems:"center", gap:"20px"}}>
+    <div style={{display:"flex", flexDirection:"column", gap:"10px", alignItems:"center"}}>
+      <img src={`../../../public/assets/${booking.accommodation.imageUrl}/${booking.accommodation.imageUrl}.jpg`} alt="" style={{width:"180px", 
+        height:"180px", cursor:"pointer", borderRadius:"20px"}} onClick={()=> handleAccommodationDetail(booking.accommodation.idAccommodation)} 
+      />
+      <h3 style={{fontWeight:"600"}}>{booking.accommodation.title}</h3>
+    </div>
+  
+    <div style={{display:"flex", flexDirection:"column", gap:"20px", alignItems:"center"}}>
 
-  <div>
-    <p><strong>Propiedad:</strong> {booking.accommodation.title}</p>
-    <img src={`../../../public/assets/${booking.accommodation.imageUrl}/${booking.accommodation.imageUrl}.jpg`} alt="" style={{borderRadius:"15px", width:"250px", 
-                height:"220px", cursor:"pointer"}} onClick={()=> handleAccommodationDetail(booking.accommodation.idAccommodation)} 
-              />
-    
-      <button onClick={()=>openBookingDetail(booking)} >
+      {lstBookings.past.includes(booking) ? (
+        
+        <HistoryIcon sx={{ color: '#9e9e9e', fontSize:"40px" }} />  
+      
+      ) : lstBookings.current.includes(booking) ? (
+        
+        <AccessTimeIcon sx={{ color: '#ffb300', fontSize:"40px" }} />
+      
+      ) : (
+
+        <FlightTakeoffIcon sx={{ color: '#00acc1', fontSize:"40px" }} />  
+      )} 
+
+      <Button variant='contained' size='small' sx={{fontWeight:"bold", backgroundColor:"#ff5a5f"}} endIcon={<VisibilityIcon/>} onClick={()=>openBookingDetail(booking)} >
         Ver detalle
-      </button>
-    {showRateButton && !booking.rated && (
-    
-      <button onClick={()=>openRatingView(booking)}>
-        Calificar Estadía
-      </button>
-    )}
-  </div>
+      </Button>
+      {showRateButton && !booking.rated && (
+        <Button variant='contained' size='small' sx={{fontWeight:"bold", backgroundColor:"#ff5a5f"}} endIcon={<BookmarkAddedIcon/>} onClick={()=>openRatingView(booking)}>
+          Calificar Estadía
+        </Button>
+      )}
+    </div>
+</div>
 );
 
 
@@ -207,7 +228,7 @@ export default function Profile() {
           position: "absolute",
           top: 90,
           left: "550px",
-          height: "80%",
+          height: "150%",
           width: "3px",
           backgroundColor: "red",
           boxShadow: "0px 4px 9px rgba(0,0,0,0.4)"
@@ -216,21 +237,17 @@ export default function Profile() {
 
       {/* Panel de información de usuario */}
       {opcion === "Sobre mí" && (
-        <div style={{ position: "absolute", zIndex: 0, top: 145, left: 700 }}>
-          <h2 style={{ fontSize: "41px" }}>Sobre mí</h2>
-
-          <div
-            style={{
-              marginTop: "20px",
-              width: "350px",
-              height: "230px",
-              borderRadius: "30px",
-              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.15)",
-              marginBottom: "20px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center"
+        <div style={{ position: "absolute", zIndex: 0, top: 145, left: 700, display:"flex", flexDirection:"column", justifyContent:"center", gap:"20px" }}>
+          <h2 style={{ fontSize: "41px", textAlign:"center"}}>Sobre mí</h2>
+          <Card
+            elevation={20}
+            sx={{
+              display:"flex",
+              justifyContent:"center",
+              alignItems:"center",
+              flexDirection:"column",
+              padding:"30px",
+              gap:"15px"
             }}
           >
             <Avatar
@@ -240,20 +257,23 @@ export default function Profile() {
             >
               {localStorage.getItem("firstName")?.charAt(0)}
             </Avatar>
-            <h3>{localStorage.getItem("firstName")}</h3>
-          </div>
-
-          
-          <h3>Nombre de usuario: {localStorage.getItem("firstName") + " " + localStorage.getItem("lastName")}</h3>
-          <h3>E-mail: {localStorage.getItem("email")}</h3>
-          
+            <h2>{localStorage.getItem("firstName")}</h2>
+            <div style={{display:"flex", flexDirection:"row", gap:"5px", alignItems:"center"}}>
+              <h3 style={{fontWeight:"400"}}>Viajero</h3> <LuggageIcon sx={{color:"#A52A2A", fontSize:"x-large"}}/>
+            </div>
+            <h5 style={{fontWeight:"450"}}><b>Nombre de usuario:</b> {localStorage.getItem("firstName") + " " + localStorage.getItem("lastName")}</h5>
+            <h5 style={{fontWeight:"450"}}><b>E-mail:</b> {localStorage.getItem("email")}</h5>
+          </Card>
         </div>
       )}
 
       {/* Panel de historial de reservas */}
       {opcion === "Historial de reservas" && (
         <div style={{ position: "absolute", zIndex: 0, top: 145, left: 650 }}>
-          <h2>Historial de reservas </h2>
+          <div>
+            <h1>Historial de reservas</h1>
+            <Divider sx={{p:0.5, width:"180%",  borderBottomWidth: 2}}></Divider>
+          </div>
 
           {loading && <p>Cargando reservas...</p>}
           {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -264,49 +284,47 @@ export default function Profile() {
 
           {!loading && !error && lstBookings.all.length > 0 && (      
               <div>
-                    <h3>Reservas Pasadas</h3>
+                    <h2 style={{paddingTop:"20px", paddingBottom:"20px"}}>Reservas pasadas</h2>
                     {lstBookings.past.length > 0 ? (
                       lstBookings.past.map((booking) => (
-                        <div key={booking.id} style={{
-                            boxShadow:"0px 4px 10px rgba(0, 0, 0, 0.25)",
+                        <Card key={booking.id} elevation={20} sx={{
                             padding: "1rem",
                             marginBottom: "1rem",
                             borderRadius: "8px"
                           }}>
                           {renderBookingCard(booking,true)}
-                        </div>
+                        </Card>
                       ))
                     ) : (
                       <p>No tienes reservas pasadas.</p>
                     )}
 
-                    <h3>Reservas en Curso</h3>
+                    <h2 style={{paddingTop:"20px", paddingBottom:"20px"}}>Reservas en curso</h2>
                     {lstBookings.current.length > 0 ? (
                       lstBookings.current.map((booking) => (
-                        <div key={booking.id} style={{
-                            boxShadow:"0px 4px 10px rgba(0, 0, 0, 0.25)",
+                        <Card key={booking.id} elevation={20} sx={{
                             padding: "1rem",
                             marginBottom: "1rem",
                             borderRadius: "8px"
                           }}>
                           {renderBookingCard(booking,false)}
-                        </div>
+                        </Card>
                       ))
                     ) : (
                       <p>No tienes reservas en curso.</p>
                     )}
 
-                    <h3>Reservas Futuras</h3>
+                    
+                    <h2 style={{paddingTop:"20px", paddingBottom:"20px"}}>Reservas futuras</h2>
                     {lstBookings.future.length > 0 ? (
                       lstBookings.future.map((booking) => (
-                        <div key={booking.id} style={{
-                            boxShadow:"0px 4px 10px rgba(0, 0, 0, 0.25)",
+                        <Card key={booking.id} elevation={20} sx={{
                             padding: "1rem",
                             marginBottom: "1rem",
                             borderRadius: "8px"
                           }}>
                           {renderBookingCard(booking,false)}
-                        </div>
+                        </Card>
                       ))
                     ) : (
                       <p>No tienes reservas futuras.</p>

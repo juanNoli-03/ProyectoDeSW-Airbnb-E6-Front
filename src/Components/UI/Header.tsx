@@ -56,11 +56,13 @@ export const Header = ({ setFilters }: Props) => {
     setAnchorEl(null);
   };
 
-  const handleNavigateLogin = () => {
+ const handleNavigateLogin = () => {
+    setAnchorEl(null);
     navigate("/login");
   };
 
-  const handleNavigateProfile = () => {
+   const handleNavigateProfile= () => {
+    setAnchorEl(null);
     navigate("/profile");
   };
 

@@ -16,14 +16,17 @@ import MailIcon from '@mui/icons-material/Mail';
 import ContactModal from '../UI/Modals/ContactModal';
 import LoadingScreen from "../UI/LoadingScreen/LoadingScreen";
 import GenericSnackbar from "../UI/Snackbar/Snackbar";
+import dayjs, { Dayjs } from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 const AccommodationDetail = () => {
   const { id: accommodationId } = useParams();
   const [accommodation, setAccommodation] = useState<Accommodation>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-  const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>('');
   const [numberOfGuests, setNumberOfGuests] = useState<number>(1);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.CREDITO);
   const [bookingSuccess, setBookingSuccess] = useState<string | null>(null);
@@ -31,20 +34,21 @@ const AccommodationDetail = () => {
   const [userData, setUserData] = useState<any>();
   const[randomUserData, setRandomUserData] = useState<any>();
   const esVisitante = localStorage.getItem("sesionActiva");
-  
   const [isLoading, setIsLoading] = useState(false);
   const [loadingScreen, setLoadingScreen] = useState({
       message: "",
       duration: 0,
     });
-  
   const [snackbar, setSnackbar] = useState({
     status: "",
     message: "",
   });
   const [snackbarVisibility, setSnackbarVisibility] = useState(false);
-  
   const [showContactModal, setContactModal] = useState<Boolean>(false);
+  
+  const [fechaInicio, setFechaInicio] = useState<Dayjs | null>(dayjs("04/04/2025"));
+  const [fechaFin, setFechaFin] = useState<Dayjs | null>(dayjs("04/05/2025"));
+
   const openContactModal = () => {
     setContactModal(true);
   }
@@ -68,7 +72,6 @@ const AccommodationDetail = () => {
     }, 3000)
     setSnackbarVisibility(false);
   }
-
   useEffect(() => {
     if (accommodationId) fetchAccommodation();
   }, [accommodationId]);
@@ -109,10 +112,10 @@ const AccommodationDetail = () => {
   }, [])
 
   const handleBooking = async () => {
-    if (!accommodation || !startDate || !endDate || !userData) return;
+    if (!accommodation || !fechaInicio || !fechaFin || !userData) return;
 
-    const start = new Date(`${startDate}T00:00:00`);
-    const end = new Date(`${endDate}T00:00:00`);
+    const start = fechaInicio.toDate();
+    const end = fechaFin.toDate();
 
     const nights = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
 
@@ -139,18 +142,6 @@ const AccommodationDetail = () => {
     } catch {
       setBookingSuccess("Error al realizar la reserva.");
     }
-  };
-
-  const renderStars = (rating: number = 0) => {
-    const full = Math.floor(rating);
-    const empty = 5 - full;
-    return (
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <span style={{ color: '#ffc107', fontSize: '2rem' }}>{'★'.repeat(full)}</span>
-        <span style={{ color: '#ccc', fontSize: '2rem' }}>{'★'.repeat(empty)}</span>
-        <span style={{ margin: "5px 0 0 5px" }}><strong>{rating}/5</strong></span>
-      </div>
-    );
   };
 
   if (loading) return <p style={{ textAlign: 'center' }}>Cargando...</p>;
@@ -254,12 +245,31 @@ const AccommodationDetail = () => {
           </p>
           <p>{accommodation.available ? 'Disponible ✅' : 'No disponible ❌'}</p>
 
-          <div style={{ marginTop: '1rem', textAlign: 'left' }}>
-            <label>Fecha inicio:</label>
-            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} style={{ width: '100%', marginBottom: '0.5rem' }} />
+          <div style={{ marginTop: '1rem', textAlign: 'left', display:"flex", flexDirection:"column", gap:"10px"}}>
+             <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['DatePicker']}>
+                  <DatePicker
+                    label="Fecha Inicio"
+                    value={fechaInicio}
+                    onChange={(newValue) => setFechaInicio(newValue)}
+                    format="DD/MM/YYYY"
+                    sx={{width: '100%'}}
+                    
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
 
-            <label>Fecha fin:</label>
-            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} style={{ width: '100%', marginBottom: '0.5rem' }} />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['DatePicker', 'DatePicker']}>
+                  <DatePicker
+                    label="Fecha Fin"
+                    value={fechaFin}
+                    onChange={(newValue) => setFechaFin(newValue)}
+                    format="DD/MM/YYYY"
+                    sx={{width: '100%'}}
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
 
             <label>Huéspedes:</label>
             <input type="number" min="1" value={numberOfGuests} onChange={(e) => setNumberOfGuests(Number(e.target.value))} style={{ width: '100%', marginBottom: '0.5rem' }} />

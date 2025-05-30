@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react';
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
-import { Button } from "@mui/material";
-import { useParams } from 'react-router-dom';
 import UserService from '../../service/UserService';
 
 export default function BookingHistory() {
@@ -12,7 +9,7 @@ export default function BookingHistory() {
     const [error, setError] = useState(null);
     const [user, setUser]=useState(null);
 
-    const email =localStorage.getItem("email");
+    const email = localStorage.getItem("email");
 
 useEffect(() => {
   const fetchIdUser = async () => {
