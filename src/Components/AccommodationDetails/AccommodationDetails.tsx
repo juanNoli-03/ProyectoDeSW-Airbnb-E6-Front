@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Form, useParams } from 'react-router-dom';
 import AccomodationService from '../../service/AccomodationService';
 import BookingService from '../../service/BookingService';
 import { Accommodation } from '../../model/Accomodation';
 import { PaymentMethod, Booking } from '../../model/Booking';
 import UserService from '../../service/UserService';
-import { Button, Divider, GridLegacy as Grid } from '@mui/material';
+import { Button, Divider, FormControl, GridLegacy as Grid, TextField, Select, MenuItem, Card } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import { AccomodationsDescriptions } from './AccommodationsDescriptions';
 import WifiIcon from '@mui/icons-material/Wifi';
@@ -21,6 +21,8 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import AddHomeIcon from '@mui/icons-material/AddHome';
+import StarIcon from '@mui/icons-material/Star';
 
 const AccommodationDetail = () => {
   const { id: accommodationId } = useParams();
@@ -138,10 +140,23 @@ const AccommodationDetail = () => {
 
     try {
       await BookingService.createBooking(booking);
-      setBookingSuccess("Reserva realizada con éxito 🎉");
-    } catch {
-      setBookingSuccess("Error al realizar la reserva.");
-    }
+      setLoadingScreen({
+        message: "Realizando reserva",
+        duration: 3000,
+      }),
+      setSnackbar({
+        status:"success",
+        message:"Reserva realizada con éxito!"
+      })
+      setIsLoading(true),
+      setTimeout(() => {
+        setIsLoading(false);
+        setSnackbarVisibility(true);
+      }, 3000)
+      setSnackbarVisibility(false);
+      } catch {
+        setBookingSuccess("Error al realizar la reserva.");
+      }
   };
 
   if (loading) return <p style={{ textAlign: 'center' }}>Cargando...</p>;
@@ -155,6 +170,27 @@ const AccommodationDetail = () => {
     `../../../public/assets/${accommodation.imageUrl}/${accommodation.imageUrl}.3.jpg`,
     `../../../public/assets/${accommodation.imageUrl}/${accommodation.imageUrl}.4.jpg`,
   ];
+
+   const textFieldStyle = {
+     '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: '#ff5a5f',
+      },
+      '&:hover fieldset': {
+        borderColor: '#ff5a5f',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '#ff5a5f',
+      },
+     },
+    '& label.Mui-focused': {
+      color: '#ff5a5f',
+    },
+    '& label': {
+      color: '#ff5a5f',
+    },
+  };
+  
 
   return (
     <div style={{ maxWidth: '900px', margin: '2rem auto', padding: '1rem' }}>
@@ -190,6 +226,9 @@ const AccommodationDetail = () => {
           <h3 style={{fontWeight:"400", paddingTop:"5px"}}>
             {accommodation.numberOfGuests} huéspedes - {accommodation.accommodationDetail.rooms} dormitorios - {accommodation.accommodationDetail.beds} camas - {accommodation.accommodationDetail.bathrooms} baños. 
           </h3>
+          <div style={{display:"flex", flexDirection:"row", paddingTop:"5x", gap:"5px", alignItems:"center"}}>
+            <StarIcon sx={{ fontSize: "30px", color: "gold" }} /> <p style={{ fontSize: "18px", color: "grey", fontWeight: "bold" }}>{accommodation.rating.toFixed(1)}</p>
+          </div>
           <Divider sx={{p:0.5, borderBottomWidth: 2}}></Divider>
           <div style={{display:"flex", flexDirection:"row", paddingTop:"30px", paddingBottom:"30px", alignItems:"center", gap:"20px"}}>
             <Avatar alt="" src={`${randomUserData?.picture?.large}`} sx={{width:"90px", height:"90px"}}/>
@@ -231,7 +270,7 @@ const AccommodationDetail = () => {
           </div>
         </div>
 
-        <div style={{
+        <Card elevation={10} style={{
           flex: '1 1 30%',
           padding: '1rem',
           border: '1px solid #ddd',
@@ -253,7 +292,14 @@ const AccommodationDetail = () => {
                     value={fechaInicio}
                     onChange={(newValue) => setFechaInicio(newValue)}
                     format="DD/MM/YYYY"
-                    sx={{width: '100%'}}
+                    enableAccessibleFieldDOMStructure={false}
+                    slots={{ textField: TextField }}
+                    slotProps={{
+                      textField: {
+                        sx: textFieldStyle,
+                        fullWidth: true,
+                      },
+                    }}
                     
                   />
                 </DemoContainer>
@@ -266,41 +312,69 @@ const AccommodationDetail = () => {
                     value={fechaFin}
                     onChange={(newValue) => setFechaFin(newValue)}
                     format="DD/MM/YYYY"
-                    sx={{width: '100%'}}
+                    enableAccessibleFieldDOMStructure={false}
+                    slots={{ textField: TextField }}
+                    slotProps={{
+                      textField: {
+                        sx: textFieldStyle,
+                        fullWidth: true,
+                      },
+                    }}
                   />
                 </DemoContainer>
               </LocalizationProvider>
 
-            <label>Huéspedes:</label>
-            <input type="number" min="1" value={numberOfGuests} onChange={(e) => setNumberOfGuests(Number(e.target.value))} style={{ width: '100%', marginBottom: '0.5rem' }} />
+              <FormControl>
+                <TextField 
+                  color="error"
+                  type='number' 
+                  id="outlined-basic" 
+                  label="Huespedes" 
+                  variant="outlined" 
+                  value={numberOfGuests} 
+                  onChange={(e) => setNumberOfGuests(Number(e.target.value))}
+                  inputProps={{
+                    min: 1, // valor mínimo permitido
+                    max: accommodation.numberOfGuests,
+                    step: 1, // incremento
+                  }}
+                  sx={textFieldStyle}
+                  
+                />
+              </FormControl>
 
-            <label>Método de pago:</label>
-            <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)} style={{ width: '100%' }}>
-              <option value={PaymentMethod.CREDITO}>Tarjeta de crédito</option>
-              <option value={PaymentMethod.DEBITO}>Tarjeta de débito</option>
-              <option value={PaymentMethod.TRANSFERENCIA}>Transferencia</option>
-            </select>
+            <FormControl sx={textFieldStyle}>
+            <Select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}>
+              <MenuItem value={PaymentMethod.CREDITO}>Tarjeta de crédito</MenuItem>
+              <MenuItem value={PaymentMethod.DEBITO}>Tarjeta de débito</MenuItem>
+              <MenuItem value={PaymentMethod.TRANSFERENCIA}>Transferencia</MenuItem>
+            </Select>
+            </FormControl>
           </div>
 
-          <button
+          <Button
             onClick={handleBooking}
-            style={{
+            variant='contained'
+            type='submit'
+            sx={{
               marginTop: '1rem',
               padding: '0.6rem 1.2rem',
-              backgroundColor: '#007bff',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '8px',
-              fontSize: '1rem',
-              cursor: 'pointer',
-              width: '100%',
+              fontSize:"medium",  
+              fontWeight:"bold", 
+              backgroundColor:"#ff5a5f",
+              cursor:"pointer",
+              borderRadius:"20px",
+              "&.Mui-disabled": {
+                backgroundColor: "#cdcdcd",
+                color: "#666",
+              },
             }}
+            endIcon={<AddHomeIcon />}
+            disabled={localStorage.getItem("sesionActiva") == null}
           >
             Reservar
-          </button>
-
-          {bookingSuccess && <p style={{ marginTop: '1rem', color: bookingSuccess.includes("éxito") ? 'green' : 'red' }}>{bookingSuccess}</p>}
-        </div>
+          </Button>
+        </Card>
       </div>
       <ContactModal
         mostrarContactModal={showContactModal}

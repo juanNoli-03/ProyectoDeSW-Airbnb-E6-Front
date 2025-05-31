@@ -288,7 +288,7 @@ export default function Profile() {
 
       {/* Panel de historial de reservas */}
       {opcion === "Historial de reservas" && (
-        <div style={{ position: "absolute", zIndex: 0, top: 145, left: 650 }}>
+        <div style={{ position: "absolute", zIndex: 0, top: 145, left: 650}}>
           <div>
             <h1>Historial de reservas</h1>
             <Divider sx={{p:0.5, width:"180%",  borderBottomWidth: 2}}></Divider>
@@ -304,6 +304,7 @@ export default function Profile() {
           {!loading && !error && lstBookings.all.length > 0 && (      
               <div>
                     <h2 style={{paddingTop:"20px", paddingBottom:"20px"}}>Reservas pasadas</h2>
+                    <div style={{display:"flex", flexDirection:"row", gap:"20px", flexWrap:"wrap", alignItems:"center"}}>
                     {lstBookings.past.length > 0 ? (
                       lstBookings.past.map((booking) => (
                         <Card key={booking.id} elevation={20} sx={{
@@ -317,8 +318,11 @@ export default function Profile() {
                     ) : (
                       <p>No tienes reservas pasadas.</p>
                     )}
+                    </div>
 
+                    
                     <h2 style={{paddingTop:"20px", paddingBottom:"20px"}}>Reservas en curso</h2>
+                    <div style={{display:"flex", flexDirection:"row", gap:"20px", flexWrap:"wrap", alignItems:"center"}}>
                     {lstBookings.current.length > 0 ? (
                       lstBookings.current.map((booking) => (
                         <Card key={booking.id} elevation={20} sx={{
@@ -332,9 +336,10 @@ export default function Profile() {
                     ) : (
                       <p>No tienes reservas en curso.</p>
                     )}
-
+                    </div>
                     
                     <h2 style={{paddingTop:"20px", paddingBottom:"20px"}}>Reservas futuras</h2>
+                    <div style={{display:"flex", flexDirection:"row", gap:"20px", flexWrap:"wrap", alignItems:"center"}}>
                     {lstBookings.future.length > 0 ? (
                       lstBookings.future.map((booking) => (
                         <Card key={booking.id} elevation={20} sx={{
@@ -348,7 +353,7 @@ export default function Profile() {
                     ) : (
                       <p>No tienes reservas futuras.</p>
                     )}
-                 
+                     </div>
           
                       <BookingDetail
                         mostrarAlerta={bookingDetail}

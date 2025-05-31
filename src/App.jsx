@@ -7,7 +7,6 @@ import AccommodationDetails from './Components/AccommodationDetails/Accommodatio
 import Profile from './Components/Profile/Profile';
 import BookingHistory from './Components/BookingHistory/BookingHistory';
 import { useState } from 'react';
-import { AccommodationFilters } from './model/AccommodationFilters';
 
 
 function App() {

@@ -76,7 +76,7 @@ export default function LoginSignUp({ isLogin }) {
         .then (response => {
             console.log(response);
             setLoadingScreen({
-              message: "",
+              message: "Iniciando Sesión",
               duration: 2000,
             }),
             setIsLoading(true),
@@ -115,7 +115,7 @@ export default function LoginSignUp({ isLogin }) {
         .then(response =>{
           console.log(response);
            setLoadingScreen({
-              message: "",
+              message: "Registrandote",
               duration: 3000,
             }),
             setIsLoading(true)
@@ -278,9 +278,11 @@ export default function LoginSignUp({ isLogin }) {
                 type="submit"
                 sx={{
                   backgroundColor: "#ff5a5f",
+                  fontWeight:"bold",
                   "&.Mui-disabled": {
                     backgroundColor: "#cdcdcd",
                     color: "#666",
+                    fontWeight:"bold"
                   },
                 }}
                 disabled={

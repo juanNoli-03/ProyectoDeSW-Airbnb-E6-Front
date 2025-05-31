@@ -1,11 +1,14 @@
 import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import {Typography, Box, Button} from '@mui/material';
+import dayjs from 'dayjs';
 import PropTypes from "prop-types";
-import { Dialog } from '@mui/material';
+import { Dialog, Divider } from '@mui/material';
 
 function BookingDetail({mostrarAlerta, closeAlerta, booking}) {
+
+  const fechaInicio = dayjs(booking.startDate).format("DD/MM/YY")
+  const fechaFin = dayjs(booking.endDate).format("DD/MM/YY")
 
   return (
     <Dialog
@@ -33,19 +36,18 @@ function BookingDetail({mostrarAlerta, closeAlerta, booking}) {
     >
       <CloseIcon />
     </IconButton>
-    <DialogContent >
-            <p><strong>Fecha de inicio:</strong> {new Date(booking.startDate).toLocaleString()}</p>
-            <p><strong>Fecha de fin:</strong> {new Date(booking.endDate).toLocaleString()}</p>
+    <DialogContent style={{display:"flex", flexDirection:"column", gap:"10px"}}>
+            <div style={{display:"flex", flexDirection:"row", alignItems:"center", gap:"20px"}}>
+              <img src="public\assets\logoLoadingScreen.png" alt="" style={{height:"50px", width:"50px"}} />
+              <h2>Detalle de la reserva realizada</h2>
+            </div>
+            <Divider sx={{ backgroundColor: "#ff5a5f" }} />
+            <p><strong>Fecha de inicio:</strong> {fechaInicio}</p>
+            <p><strong>Fecha de fin:</strong> {fechaFin}</p>
             <p><strong>Número de huéspedes:</strong> {booking.numberOfGuests}</p>
-            <p><strong>Noches:</strong> {booking.numberOfNights}</p>
+            <p><strong>Cantidad de noches:</strong> {booking.numberOfNights}</p>
             <p><strong>Monto final:</strong> ${booking.finalAmount}</p>
             <p><strong>Método de pago:</strong> {booking.paymentMethod}</p>
-            <p>
-                <strong>Rating:</strong>{" "}
-                {typeof booking?.accommodation?.rating === "number"
-                 ? booking.accommodation.rating.toFixed(1)
-                : "Sin calificación"} ⭐
-            </p>
     </DialogContent>
   </Dialog>
   );

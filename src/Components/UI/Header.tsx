@@ -82,9 +82,10 @@ export const Header = ({ setFilters }: Props) => {
     setPais(event.target.value);
   };
 
-  const [precio, setPrecio] = useState(30);
+  const [precio, setPrecio] = useState(150);
   const sesionActiva = localStorage.getItem("sesionActiva") != null;
   const handleLogout = () => {
+    setAnchorEl(null);
     const duration = 3000;
     setLoadingScreen({
       message: "",
@@ -209,9 +210,15 @@ export const Header = ({ setFilters }: Props) => {
                 <MenuItem value={"Argentina"}>Argentina</MenuItem>
                 <MenuItem value={"Brasil"}>Brasil</MenuItem>
                 <MenuItem value={"Colombia"}>Colombia</MenuItem>
+                <MenuItem value={"Perú"}>Perú</MenuItem>
                 <MenuItem value={"España"}>España</MenuItem>
-                <MenuItem value={"Francia"}>Francia</MenuItem>
                 <MenuItem value={"Italia"}>Italia</MenuItem>
+                <MenuItem value={"Alemania"}>Alemania</MenuItem>
+                <MenuItem value={"Francia"}>Francia</MenuItem>
+                <MenuItem value={"Japón"}>Japón</MenuItem>
+                <MenuItem value={"China"}>China</MenuItem>
+                <MenuItem value={"India"}>India</MenuItem>
+                <MenuItem value={"Tailandia"}>Tailandia</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -226,7 +233,7 @@ export const Header = ({ setFilters }: Props) => {
               step={10}
               marks
               min={10}
-              max={110}
+              max={300}
               sx={sliderStyle}
             />
             <Divider orientation="vertical" flexItem />
@@ -275,8 +282,6 @@ export const Header = ({ setFilters }: Props) => {
             <SearchIcon onClick={executeFilters} fontSize="large" sx={{ color: "white", backgroundColor: "#ff5a5f", padding: "8px", borderRadius: "20px", cursor: "pointer" }}></SearchIcon>
           </Box>
         </Box>)}
-
-
 
       {isLoading && (
         <LoadingScreen

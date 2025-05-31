@@ -1,45 +1,72 @@
 import DialogContent from '@mui/material/DialogContent';
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import {Typography, Box, Rating} from '@mui/material';
+import {Box, Rating, Button} from '@mui/material';
 import PropTypes from "prop-types";
-import { Dialog } from '@mui/material';
+import { Dialog, Divider } from '@mui/material';
 import BookingService from '../../service/BookingService';
-
+import SendIcon from '@mui/icons-material/Send';
+import LoadingScreen from "../UI/LoadingScreen/LoadingScreen";
+import GenericSnackbar from "../UI/Snackbar/Snackbar";
 
 function RatingView({mostrarAlerta, closeAlerta, booking, onRatingSuccess}) {
 
     const [value, setValue] = useState(0);
-    const [ratingSuccess, setRatingSuccess] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+      const [loadingScreen, setLoadingScreen] = useState({
+          message: "",
+          duration: 0,
+        });
+      const [snackbar, setSnackbar] = useState({
+        status: "",
+        message: "",
+      });
+      const [snackbarVisibility, setSnackbarVisibility] = useState(false);
 
+      const handleClose = () => {
+        closeAlerta ();
+      }
 
     //Actualizar Rating de la propiedad
+    
     const handleRating= async()=>{
+        setSnackbarVisibility(false);
+        setIsLoading(false);
         try {
         await   BookingService.updateBookingRating(booking,value);
-                setRatingSuccess("Calificacion realizada con éxito 🎉");
                 
                 const cantRatings = booking.accommodation.numberOfRating +1 ;
                 const newRating= (booking.accommodation.rating * booking.accommodation.numberOfRating +value) /cantRatings;
 
 
                 onRatingSuccess(booking.idBooking,newRating);
-                
+
+                setLoadingScreen({
+                  message: "Calificando",
+                  duration: 3000,
+                }),
+                setSnackbar({
+                  status:"success",
+                  message:"Calificación realizada con éxito!"
+                })
+                handleClose()
+                setIsLoading(true)
                 setTimeout(() => {
-                    closeAlerta();
-                }, 1500);
+                setIsLoading(false);
+                setSnackbarVisibility(true);
+              }, 3000)
                 
-        } catch {
-                setRatingSuccess("Error al realizar la Calificacion.");
+                
+        } catch (e) {
+          console.log(e);
         }
-
-
     }
 
     return (
+    <>
     <Dialog
-    onClose={closeAlerta}
+    onClose={handleClose}
     aria-labelledby="customized-dialog-title"
     open={mostrarAlerta}
     sx={{
@@ -53,7 +80,7 @@ function RatingView({mostrarAlerta, closeAlerta, booking, onRatingSuccess}) {
   >
     <IconButton
       aria-label="close"
-      onClick={closeAlerta}
+      onClick={handleClose}
       sx={{
         position: 'absolute',
         right: 8,
@@ -63,31 +90,48 @@ function RatingView({mostrarAlerta, closeAlerta, booking, onRatingSuccess}) {
     >
       <CloseIcon />
     </IconButton>
-    <DialogContent >
-        <h1>Calificá tu estadia en {booking.accommodation.title} </h1> 
+    <DialogContent style={{display:"flex", flexDirection:"column", gap:"10px",}} >
+          <div style={{display:"flex", flexDirection:"row", alignItems:"center", gap:"20px"}}>
+            <img src="public\assets\logoLoadingScreen.png" alt="" style={{height:"50px", width:"50px"}} />
+            <h2>Calificá tu estadia en {booking.accommodation.title} </h2> 
+          </div>
+          <Divider sx={{ backgroundColor: "#ff5a5f" }} />
         
-        <Box sx={{ '& > legend': { mt: 2 } }}>
+        <Box sx={{display:"flex", justifyContent:"center", pt:1 }}>
         <Rating
         name="simple-controlled"
         value={value}
         onChange={(event, newValue) => {
           setValue(newValue);
         }}
+        sx={{
+          '& .MuiRating-icon': {
+          fontSize: '3rem', // Cambiá este valor a gusto (ej: 4rem, 48px, etc)
+          },
+        }}
       />
         </Box>
-
-        <button onClick={handleRating}>Enviar</button>
-
-    {/* Mensaje de éxito o error */}
-    {ratingSuccess && (
-      <Typography sx={{ mt: 2, color: ratingSuccess.includes("éxito") ? 'green' : 'red' }}>
-        {ratingSuccess}
-
-      </Typography>
-    )}
+        <div style={{display:"flex", justifyContent:"center"}}>
+          <Button onClick={handleRating} variant='contained' sx={{width:"50%", mt:3, backgroundColor:"#ff5a5f", fontWeight:"bold"}} endIcon={<SendIcon/>}>
+            Calificar</Button>
+        </div>
 
     </DialogContent>
   </Dialog>
+   {snackbarVisibility && (
+            <GenericSnackbar
+              status={snackbar.status}
+              message={snackbar.message}
+              visibility={snackbarVisibility}
+            />
+      )}
+      {isLoading && (
+          <LoadingScreen
+            message={loadingScreen.message}
+            duration={loadingScreen.duration}
+          />
+      )}
+    </>
   );
 } 
 

@@ -21,7 +21,7 @@ export class AccommodationDetail {
 }
 
 export enum Continent {
-    SUDAMERICA = "Sudamerica",
+    SUDAMERICA = "Sudamérica",
     EUROPA = "Europa",
     ASIA = "Asia"
 }
