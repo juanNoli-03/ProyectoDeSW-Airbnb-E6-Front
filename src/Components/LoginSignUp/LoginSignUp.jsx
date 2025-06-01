@@ -130,6 +130,12 @@ export default function LoginSignUp({ isLogin }) {
         })
         .catch(e => {
             console.log(e);
+            console.log(e);
+          setSnackbar({
+            status: "error",
+            message: "Ya existe un usuario registrado en el sistema con esos datos.",
+          });
+          setSnackbarVisibility(true);
         })
         .finally (
             setUsuarioRegister({
@@ -141,6 +147,53 @@ export default function LoginSignUp({ isLogin }) {
         )
       }
     } 
+
+    
+    
+    const [errores, setErrores] = useState({});
+
+    const presenciaDeErrores = Object.values(errores).some(
+      (valor) => valor != null
+    );
+
+    const validarCampo = (campo, valor) => {
+    const patronEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/;
+
+    if (campo === "email" && !patronEmail.test(valor) && valor != "") {
+      setErrores((errores) => ({
+        ...errores,
+        email: "El formato del email no es válido.",
+      }));
+    }
+
+    if (campo === "email" && (patronEmail.test(valor) || valor === "")) {
+      setErrores((errores) => ({
+        ...errores,
+        email: null,
+      }));
+    }
+
+    if (
+      campo === "contraseña" &&
+      (valor.length < 6 || valor.length > 20) &&
+      valor != ""
+    ) {
+      setErrores((errores) => ({
+        ...errores,
+        contraseña: "La contraseña debe ser de entre 6 y 20 caracteres.",
+      }));
+    }
+
+    if (
+      campo === "contraseña" &&
+      ((valor.length >= 6 && valor.length <= 20) || valor === "")
+    ) {
+      setErrores((errores) => ({
+        ...errores,
+        contraseña: null,
+      }));
+    }
+  };
 
   const textFieldStyle = {
      '& .MuiOutlinedInput-root': {
@@ -159,6 +212,12 @@ export default function LoginSignUp({ isLogin }) {
     },
     '& label': {
       color: '#ff5a5f',
+    },
+    "& .MuiOutlinedInput-root.Mui-error fieldset": {
+      borderColor: "red",
+    },
+    "& .MuiInputLabel-root.Mui-error": {
+      color: "red",
     },
   };
 
@@ -224,6 +283,8 @@ export default function LoginSignUp({ isLogin }) {
                     ? usuario.email
                     : usuarioRegister.email
                 }
+                error={Boolean(errores.email)}
+                helperText={errores.email}
                 onChange={(e) =>
                   isLogin === true
                     ? setUsuario({ ...usuario, email: e.target.value })
@@ -232,6 +293,7 @@ export default function LoginSignUp({ isLogin }) {
                         email: e.target.value,
                       })
                 }
+                onBlur={(e) => validarCampo("email", e.target.value)}
                 sx={textFieldStyle}
               />
                 
@@ -254,6 +316,8 @@ export default function LoginSignUp({ isLogin }) {
                           password: e.target.value,
                         })
                   }
+                  helperText={errores.contraseña}
+                  error={Boolean(errores.contraseña)}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -271,6 +335,7 @@ export default function LoginSignUp({ isLogin }) {
                       </InputAdornment>
                     ),
                   }}
+                  onBlur={(e) => validarCampo("contraseña", e.target.value)}
                   sx={textFieldStyle}
                 />
               <Button
@@ -290,7 +355,7 @@ export default function LoginSignUp({ isLogin }) {
                     isLogin === true
                       ? usuario
                       : usuarioRegister
-                  )
+                  ) || presenciaDeErrores
                 }
                 endIcon={
                   isLogin === true ? (
