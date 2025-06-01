@@ -40,7 +40,6 @@ export const Header = ({ setFilters }: Props) => {
       country: pais ?? null,
       city: null,
       pricePerNight: precio ?? null,
-      available: includeAll ? false : true,
       sortByPriceDesc: sortOrder === "desc",
     }
 
@@ -138,8 +137,6 @@ export const Header = ({ setFilters }: Props) => {
   }
 
   const [sortOrder, setSortOrder] = useState("asc");
-  const [includeAll, setIncludeAll] = useState(false);
-
 
 
   return (
@@ -258,24 +255,6 @@ export const Header = ({ setFilters }: Props) => {
                 <MenuItem value="desc">Precio (Mayor a Menor)</MenuItem>
               </Select>
             </FormControl>
-          </Box>
-          <Box>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={includeAll}
-                  onChange={(e) => setIncludeAll(e.target.checked)}
-                  sx={{
-                    color: '#ff5a5f',
-                    '&.Mui-checked': {
-                      color: '#ff5a5f',
-                    },
-                  }}
-                />
-              }
-              label="Incluir no disponibles"
-              sx={{ ml: 1 }}
-            />
           </Box>
           <Divider orientation="vertical" flexItem />
           <Box>

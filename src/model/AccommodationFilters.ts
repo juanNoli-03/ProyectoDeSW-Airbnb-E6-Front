@@ -3,6 +3,5 @@ export class AccommodationFilters {
     country: string | null;
     city: string | null;
     pricePerNight: number | null;
-    available: boolean;
     sortByPriceDesc: boolean;
 }

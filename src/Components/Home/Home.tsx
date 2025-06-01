@@ -33,7 +33,7 @@ export default function Home({ filters }: Props) {
 
   const fetchAllAccommodations = async () => {
     try {
-      const accommodations = await AccommodationService.getAccommodationsByAvailable().then((res) => {
+      const accommodations = await AccommodationService.getAccommodations().then((res) => {
         return res.data;
       })
 
